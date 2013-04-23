@@ -1,0 +1,552 @@
+" Vim configuration file
+" Maintainer:   Pierre-Antoine Lacaze
+
+
+" {{{            Generic Settings - 1st part
+"-----------------------------------------------
+set nocompatible
+set history=1000
+set viminfo='1000,:1000,/1000
+let g:showfuncctagsbin = "ctags"
+set shellslash  " use normal slash for pathes under win32
+"}}}
+
+"{{{            Pathes & Backups
+ "-----------------------------------------------
+set backup " make a backup file
+set writebackup
+set swapfile
+if has('win32')
+    let MYVIMFILES = expand($VIM) . "/vimfiles"
+else
+    let MYVIMFILES = "~/.vim"
+endif
+let &backupdir = expand(MYVIMFILES) . "/backup//"
+if !isdirectory(&backupdir)
+    echo &backupdir . " does not exist, creating"
+    mkdir(&backupdir)
+endif
+let &directory = expand(MYVIMFILES) . "/temp//"
+if !isdirectory(&directory)
+    echo &directory . " does not exist, creating"
+    mkdir(&directory)
+endif
+let &makeef = expand(MYVIMFILES) . "/error.err"
+"}}}
+
+"{{{            Plugins management
+let &runtimepath .= ',' . expand(MYVIMFILES) . "/bundle/neobundle.vim/"
+call neobundle#rc(expand(MYVIMFILES) . "/bundle/")
+
+" Let NeoBundle manage NeoBundle
+NeoBundleFetch 'Shougo/neobundle.vim'
+
+" Asynchronous execution library
+NeoBundle 'Shougo/vimproc', {
+    \ 'build' : {
+    \     'windows' : 'make -f make_mingw32.mak',
+    \     'mac' : 'make -f make_mac.mak',
+    \     'unix' : 'make -f make_unix.mak'
+    \    },
+    \ }
+
+" A fast, as-you-type, fuzzy-search code completion engine for Vim
+NeoBundle 'Valloric/YouCompleteMe', {
+    \ 'build' : {'unix' : './install.sh --clang-completer' }}
+
+" Syntax checking hacks for vim
+NeoBundle 'scrooloose/syntastic'
+
+" Vim plugin for the_silver_searcher, 'ag'
+NeoBundle 'rking/ag.vim'
+
+" Vim motions on speed!
+NeoBundle 'Lokaltog/vim-easymotion'
+
+" The ultimate vim statusline utility.
+NeoBundle 'Lokaltog/vim-powerline'
+
+" Automatically close quotes, parenthesis, braces, and other delimiters.
+NeoBundle 'Raimondi/delimitMate'
+
+" Alternate files quickly (.h --> .c)
+NeoBundle 'a.vim'
+
+" File explorer
+NeoBundle 'scrooloose/nerdtree'
+
+" Show colored guides along indent levels, to help with alignment and spacing.
+NeoBundle 'nathanaelkane/vim-indent-guides'
+
+" A colorscheme with light and dark variants.
+NeoBundle 'altercation/vim-colors-solarized'
+
+" Tools to remove trailing whitespace.
+NeoBundle 'DeleteTrailingWhitespace'
+
+" Better character finding.
+NeoBundle 'dahu/vim-fanfingtastic'
+
+" Better matching with %.
+NeoBundle 'matchit.zip'
+
+" Fix repeat in a number of plugins.
+NeoBundle 'tpope/vim-repeat'
+
+" Epic automated alignment.
+NeoBundle 'godlygeek/tabular'
+
+" Awesome Git wrapper.
+NeoBundle 'tpope/vim-fugitive'
+
+" A fuzzy file-finder, mru switcher, buffer finder, and more
+NeoBundle 'kien/ctrlp.vim'
+
+" commentary.vim: comment stuff out
+NeoBundle 'tpope/vim-commentary'
+
+" A source code browser plugin for Vim
+NeoBundle 'majutsushi/tagbar'
+
+" ansi escape sequences concealed, but highlighted as specified 
+NeoBundle 'vim-scripts/AnsiEsc.vim'
+
+" Better rainbow paraentheses
+NeoBundle 'kien/rainbow_parentheses.vim'
+
+" Use the power of vim to rename groups of files
+NeoBundle 'renamer.vim'
+
+" syntax for qmake tool from QT
+NeoBundle 'qmake--syntax.vim'
+
+" syntax for ispc language
+NeoBundle 'https://raw.github.com/ispc/ispc/master/contrib/ispc.vim', {'script_type' : 'syntax'}
+
+" Hints for C library Functions - man 2
+NeoBundle 'vim-scripts/Hints-for-C-Library-Functions'
+
+" Hints for C library Functions - man 3
+NeoBundle 'vim-scripts/Hints-for-C-Library-Functions-B'
+
+" Syntax highlighting for C library functions and constants 
+NeoBundle 'clibs.vim'
+
+NeoBundleCheck
+" }}}
+
+" {{{            Generic Settings - 2nd part
+"-----------------------------------------------
+filetype on
+filetype plugin on
+filetype indent on
+"}}}
+
+"{{{            Colors
+"----------------------------------------------
+if !has('win32')
+    set termencoding=utf-8
+endif
+
+if has('gui_running') || &t_Co > 2
+    syntax on
+    set background=dark
+    set popt+=syntax:y " syntax when printing
+
+    if $COLORTERM == "gnome-terminal" || $TERM == "screen-256color"
+       \ || $TERM == "rxvt-unicode"   || $TERM == "rxvt-unicode-256color"
+        set t_Co=256
+        " bar cursor in insert mode, for this to work rxvt-unicode must be patched
+        let &t_SI = "\033]12\007\033[5 q"
+        let &t_EI = "\033]12\007\033[0 q"
+        " colorscheme neverland
+        colorscheme solarized
+    elseif has('gui_running') || &t_Co >= 88
+        colorscheme solarized
+    else
+        colorscheme desert
+    endif
+
+endif
+"}}}
+
+"{{{            Fonts
+"-----------------------------------------------
+if has('win32')
+    set guifont=DejaVu_Sans_Mono:h10
+elseif has('gui_gtk')
+    set guifont=Deja\ Vu\ Sans\ Mono\ 9
+endif
+"}}}
+
+"{{{            UI behaviour
+"-----------------------------------------------
+set number
+set hidden
+set showmatch
+set showcmd
+set showmode
+set laststatus=2 " always show the status line
+
+" set cmdheight=2
+" minimize size
+set winminheight=0
+set winminwidth=0
+
+set splitbelow splitright
+
+" attempt to set the default position (and size) on win32
+if has('win32')
+    winpos 342 0
+endif
+if has('gui_running')
+    set lines=47
+    set columns=130
+endif
+
+" tab complete menu
+set wildmenu
+set wildmode=list:longest,full
+set wildignore+=*.o,*~,*.bak,*.obj
+
+" no noise, use this trick on visualbell because it is reset in guimode
+set noerrorbells
+set visualbell t_vb=
+if has("autocmd")
+    autocmd GUIEnter * set visualbell t_vb=
+endif
+
+" avoid Esc key pauses triggered by remapped meta keycodes
+set ttimeout timeoutlen=1000 ttimeoutlen=10
+
+" set updatetime=500       " tag preview
+set guioptions=imrRbate  " remove useless UI
+set shortmess=atI        " remove useless messages
+set lazyredraw           " speedup processing
+set ttyfast
+
+" Nice window title stolen from ciaranm
+if has('title') && (has('gui_running') || &title)
+    set titlestring=
+    set titlestring+=%f\                     " file name
+    set titlestring+=%h%m%r%w                " flags
+    set titlestring+=\ -\ %{v:progname}      " program name
+    set titlestring+=\ -\ %{substitute(getcwd(),\ $HOME,\ '~',\ '')}  " working directory
+endif
+"}}}
+
+"{{{            Text editing
+"-----------------------------------------------
+" enable virtual edit in vblock mode, and one past the end
+set virtualedit=block,onemore
+set backspace=indent,eol,start  " make backspace delete anything
+
+set fileformats=unix,dos,mac
+set encoding=utf8
+set fileencoding=utf8
+
+set formatoptions=tcrqn
+
+let mapleader = ','
+
+set nowrap
+set whichwrap=<,>,[,],
+set linebreak  " Wrap on words
+
+"display tabs and trailing spaces
+" set listchars=tab:▸\ ,trail:⋅,nbsp:⋅,eol:¬
+set listchars=tab:>-,trail:.,nbsp:.
+set nolist
+
+" indent options
+set shiftwidth=4
+set softtabstop=4
+"set tabstop=4
+set autoindent
+set smartindent
+set expandtab
+set smarttab
+set cinoptions=t0
+"}}}
+
+"{{{            Mouse
+"-----------------------------------------------
+if !has('gui_running')
+    set mouse=a         " enable the mouse even anywhere (in terms)
+end
+set mousehide           " hide the mouse whilst editing
+set clipboard=unnamed   " yank / paste between windows using y and p keys
+"}}}
+
+"{{{            Searching
+"-----------------------------------------------
+set iskeyword+=_,$,@,%,#,-  " those should not be word dividers when searching
+
+set incsearch
+set hlsearch
+
+set ignorecase
+set smartcase
+"}}}
+
+"{{{            Programming
+"-----------------------------------------------
+" let &tags = expand(MYVIMFILES) . '/tags/tags_gtk,' . expand(MYVIMFILES) . '/tags/tags_opencv,tags;/'
+set tags=./tags;
+
+set completeopt=menu,preview,longest
+set showfulltag
+set foldmethod=marker
+"}}}
+
+"{{{            Key Bindings
+"-----------------------------------------------
+
+" make meta keys 'work' on terminal vim. For this to work the terminal
+" must send escape sequences instead of Alt keycodes
+if !has('gui_running')
+    set <F13>=x
+    map <F13> <M-x>
+    map! <F13> <M-x>
+
+    set <F14>=c
+    map <F14> <M-c>
+    map! <F14> <M-c>
+  
+    set <F15>=s
+    map <F15> <M-s>
+    map! <F15> <M-s>
+  
+    set <F16>=q
+    map <F16> <M-q>
+    map! <F16> <M-q>
+  
+    set <F17>=a
+    map <F17> <M-a>
+    map! <F17> <M-a>
+endif
+
+" change annoying behaviours
+vnoremap    <BS>            d
+inoremap    #               X<BS>#
+nmap        q:              :q
+noremap     Q               gq
+nnoremap    Y               y$
+
+" easy indenting
+vnoremap    <               <gv
+vnoremap    >               >gv
+vmap        <Tab>           >
+vmap        <S-Tab>         <
+
+" insert new line without going into insert mode
+map         <Enter>         o<ESC>
+map         <S-Enter>       O<ESC>
+
+" Space will toggle folds
+nnoremap    <space>         za
+
+" Use ALT-S for saving, also in Insert mode
+nmap        <C-s>           :update<CR>
+vmap        <C-s>           <C-C>:update<CR>
+imap        <C-s>           <C-O>:update<CR>
+nmap        <M-s>           :update<CR>
+vmap        <M-s>           <C-C>:update<CR>
+imap        <M-s>           <C-O>:update<CR>
+
+" ALT-Q to close
+nmap        <M-q>           :q<CR>
+vmap        <M-q>           <C-C>:q<CR>
+imap        <M-q>           <C-O>:q<CR>
+
+" comment out lines of code (toggles)
+nmap        <silent> <M-x>  gcc
+vmap        <silent> <M-x>  gc
+imap        <silent> <M-x>  <C-O>gcc
+nmap        <silent> <M-c>  gccj
+imap        <silent> <M-c>  <C-O>gcc<C-O>j
+ 
+" Align stuff with Tabularize
+nmap        <M-a>&          :Tabularize /&<CR>
+vmap        <M-a>&          :Tabularize /&<CR>
+nmap        <M-a>=          :Tabularize /=<CR>
+vmap        <M-a>=          :Tabularize /=<CR>
+nmap        <M-a>:          :Tabularize /:<CR>
+vmap        <M-a>:          :Tabularize /:<CR>
+nmap        <M-a>::         :Tabularize /:\zs<CR>
+vmap        <M-a>::         :Tabularize /:\zs<CR>
+nmap        <M-a>,          :Tabularize /,<CR>
+vmap        <M-a>,          :Tabularize /,<CR>
+nmap        <M-a><Bar>      :Tabularize /<Bar><CR>
+vmap        <M-a><Bar>      :Tabularize /<Bar><CR>
+
+" tab control (alla firefox)
+nmap        <C-S-tab>       :tabprevious<CR>
+nmap        <C-tab>         :tabnext<CR>
+nmap        <C-t>           :tabnew<CR>
+map         <C-S-tab>       :tabprevious<CR>
+map         <C-tab>         :tabnext<CR>
+imap        <C-S-tab>       <C-O>:tabprevious<CR>
+imap        <C-tab>         <C-O>:tabnext<CR>
+imap        <C-t>           <C-O>:tabnew<CR>
+
+" fuzzyfinder_textmate
+nmap        ,f              :FuzzyFinderFile<CR>
+nmap        ,b              :FuzzyFinderBuffer<CR>
+nmap        ,t              :FuzzyFinderTag<CR>
+
+nmap        ,e              :exe 'tabe ' . expand(MYVIMFILES) . '/vimrc'<CR>
+
+" F keys
+nnoremap    <silent> <F1>   K
+inoremap    <silent> <F1>   <C-O>K
+
+nmap    <silent> <F2>   zm
+vmap    <silent> <F2>   <C-C>zm
+imap    <silent> <F2>   <C-O>zm
+nmap    <silent> <F3>   zr
+vmap    <silent> <F3>   <C-C>zr
+imap    <silent> <F3>   <C-O>zr
+
+nnoremap    <S-F2>          :bp<CR>
+inoremap    <S-F2>          <C-O>:bp<CR>
+nnoremap    <S-F3>          :bn<CR>
+inoremap    <S-F3>          <C-O>:bn<CR>
+
+nnoremap    <silent> <F4>   :silent nohlsearch<CR>
+inoremap    <silent> <F4>   <C-O>:silent nohlsearch<CR>
+nnoremap    <silent> <F5>   :NERDTreeToggle<CR>
+inoremap    <silent> <F5>   <C-O>:NERDTreeToggle<CR>
+nnoremap    <silent> <F6>   :TagbarToggle<CR>
+inoremap    <silent> <F6>   <C-O>:TagbarToggle<CR>
+
+
+nnoremap    <F7>            :set invpaste paste?<CR>
+set pastetoggle=<F7>
+
+nnoremap    <silent><F8>    :A<CR>
+inoremap    <silent><F8>    <C-O>:A<CR>
+
+nnoremap    <F9>            :set list!<CR>
+inoremap    <F9>            <C-O>:set list!<CR>
+
+nnoremap    <F10>           :RainbowParenthesesToggle<CR>
+inoremap    <F10>           <C-O>:RainbowParenthesesToggle<CR>
+
+noremap     <F11>           :update<CR>
+vnoremap    <F11>           <C-C>:update<CR>
+inoremap    <F11>           <C-O>:update<CR>
+nnoremap    <silent> <F12>  :call UpdateTags()<CR>
+inoremap    <silent> <F12>  <C-O>:call UpdateTags()<CR>
+"}}}
+
+"{{{            Plugins settings
+"-----------------------------------------------
+
+" Settings for commentary
+autocmd FileType cmake set commentstring=#\ %s
+autocmd FileType xdefaults set commentstring=!\ %s
+
+" Settings for Explorer.vim
+let g:explHideFiles='^\.'
+
+" Settings for Netrw
+let g:netrw_list_hide='^\.,\~$'
+
+" c specific options
+let c_gnu            = 1
+let c_no_if0         = 1
+let c_syntax_for_h   = 1
+" let c_space_errors = 1
+
+" Settings for :TOhtml
+let html_number_lines = 1
+let html_use_css      = 1
+let use_xhtml         = 1
+
+" clibs syntax hightlighting options
+let c_hi_identifiers = 'all'
+let c_hi_libs        = ['*']
+
+let NERDTreeWinPos     = 'left'
+let NERDTreeQuitOnOpen = 1
+let NERDTreeMouseMode  = 2
+
+" c/h alter
+let g:alternateExtensions_cc = "hh,h,HH,H"
+let g:alternateExtensions_CC = "hh,h,HH,H"
+let g:alternateExtensions_hh = "cc,c,CC,c"
+let g:alternateExtensions_HH = "cc,c,CC,c"
+
+let glib_deprecated_errors = 1
+
+let g:solarized_termtrans = 1
+let g:solarized_termcolors = 256
+ "}}}
+
+"{{{            Functions
+"-----------------------------------------------
+if has('eval')
+    " automatically save tags in appropriate file
+    fun! UpdateTags()
+        let _ctags_cl_ = 'ctags -N -R --c++-kinds=+p --fields=+iaS --extra=+q -IG_DEFINE_TYPE+ .'
+        let _resp_ = system(_ctags_cl_)
+    endfun
+
+    runtime! macros/matchit.vim
+
+    " writes a file without changing it's modification date
+    function! WriteSmall()
+        let mtime = system("date -d @`stat -c %Y ".shellescape(expand('%:p')) . "`")
+        write
+        call system("touch --date='".mtime."' ".shellescape(expand('%:p')))
+    endfunction
+endif
+
+"}}}
+
+"{{{            AutoCommands
+"-----------------------------------------------
+if has('autocmd')
+    " turn off any existing search
+    au VimEnter * nohls
+
+    " automatically open and close the popup menu / preview window
+    au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+
+    " cindent for c / c++ files
+    au BufNewFile,BufRead *.cpp,*.cc,*.h,*.c,*.hh
+                \ setlocal cindent |
+                \ runtime! syntax/clibs.vim |
+                \ setlocal fmr={,} |
+                \ setlocal list |
+                \ setlocal expandtab
+
+    au BufNewFile,BufRead *.cc,*.hh,*.h
+                \ setfiletype=cpp
+
+    au BufNewFile,BufRead *.colors
+                \ setfiletype=xdefaults
+
+    au FileType text
+                \ setlocal textwidth=78 |
+                \ setlocal wrap
+
+    " jump to last edited line on opening
+    au BufReadPost *
+                \ if line("'\"") > 0 && line("'\"") <= line("$") |
+                \   exe "normal g`\"" |
+                \ endif
+
+    " " Don't automatically insert a comment command when entering insert mode with o
+    au FileType * setl formatoptions-=o
+
+    " " But do when hitting enter on a comment line, or when wrapping
+    au FileType * setl formatoptions+=tcrq
+
+    " au syntax * call rainbow_parentheses#activate() 
+
+endif
+"}}}
+
+" set vbs=1
