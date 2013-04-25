@@ -537,7 +537,8 @@ if has('autocmd')
                 \ runtime! syntax/clibs.vim |
                 \ setlocal fmr={,} |
                 \ setlocal list |
-                \ setlocal expandtab
+                \ setlocal expandtab |
+                \ setlocal comments-=:// comments+=f://
 
     au BufNewFile,BufRead *.cc,*.hh,*.h
                 \ setfiletype=cpp
