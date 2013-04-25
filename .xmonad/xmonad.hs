@@ -169,7 +169,7 @@ myGSConfig = (buildDefaultGSConfig myColorizer)
                                else return (myDarkColor, myWhiteColor)
 
 
-myGridApps = ["nvidia-settings", "calibre", "deluge", "qtcreator", "inkscape", "gimp"]
+myGridApps = ["nvidia-settings", "calibre", "deluge", "qtcreator", "inkscape", "gimp", "urxvtd -q -f -o"]
 
 
 myRestart = "for pid in `pgrep dzen2`; do kill -9 $pid; done && xmonad --recompile && xmonad --restart"
