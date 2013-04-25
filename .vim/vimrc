@@ -540,12 +540,6 @@ if has('autocmd')
                 \ setlocal expandtab |
                 \ setlocal comments-=:// comments+=f://
 
-    au BufNewFile,BufRead *.cc,*.hh,*.h
-                \ setfiletype=cpp
-
-    au BufNewFile,BufRead *.colors
-                \ setfiletype=xdefaults
-
     au FileType text
                 \ setlocal textwidth=78 |
                 \ setlocal wrap
