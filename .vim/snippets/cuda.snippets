@@ -1,0 +1,200 @@
+# CUDA
+
+## CUDA Functions
+snippet sync "__syncthreads"
+__syncthreads();
+${1}
+endsnippet
+
+snippet thsync "cudaThreadSynchronize"
+cudaThreadSynchronize();
+${1}
+endsnippet
+
+snippet event
+cudaEventCreate(${1:&var});
+${2}
+endsnippet
+
+snippet eventr
+cudaEventRecord(${1:var},${2:0});
+${3}
+endsnippet
+
+snippet events
+cudaEventSynchronize(${1:var});
+${2}
+endsnippet
+
+snippet evente
+cudaEventElapsedTime(${1:&time},${2:ini},${3:end});
+${4}
+endsnippet
+
+snippet eventd
+cudaEventDestroy(${1:var});
+${2}
+endsnippet
+
+snippet malloc
+cudaMalloc(${1:(void**)&var},${2:size});
+${3}
+endsnippet
+
+snippet free
+cudaFree(${1:var});
+${2}
+endsnippet
+
+snippet memcpy
+cudaMemcpy(${1:dest_var},${2:orig_var},${3:size},${4});
+${5}
+endsnippet
+
+snippet memcpyhd
+cudaMemcpy(${1:d_var},${2:h_var},${3:size},cudaMemcpyHostToDevice);
+${4}
+endsnippet
+
+snippet memcpydh
+cudaMemcpy(${1:h_var},${2:d_var},${3:size},cudaMemcpyDeviceToHost);
+${4}
+endsnippet
+
+snippet memcpydd
+cudaMemcpy(${1:d_var2},${2:d_var1},${3:size},cudaMemcpyDeviceToDevice);
+${4}
+endsnippet
+
+## CUDA Structures
+snippet global
+__global__ void ${1:foo}(${2:arg}){
+        ${3}
+}
+endsnippet
+
+snippet device
+__device__ ${1:void} ${2:name}(${3:args}){
+        ${4}
+}
+endsnippet
+
+snippet kernel
+${1:foo} <<< ${2:nblocks}, ${3:nthreads}, ${4:smsize} >>> (${5:arg});
+${6}
+endsnippet
+
+## CUDA Data Types
+snippet eventt
+cudaEvent_t ${1:var};
+endsnippet
+
+## CUDA words
+snippet htod
+cudaMemcpyHostToDevice
+endsnippet
+
+snippet dtoh
+cudaMemcpyDeviceToHost
+endsnippet
+
+snippet tx
+threadIdx.x
+endsnippet
+
+snippet ty
+threadIdx.y
+endsnippet
+
+snippet tz
+threadIdx.z
+endsnippet
+
+snippet bx
+blockIdx.x
+endsnippet
+
+snippet by
+blockIdx.y
+endsnippet
+
+snippet bz
+blockIdx.z
+endsnippet
+
+## CUDA code lines
+snippet id
+${1:int} ${2:i} = threadIdx.x + blockDim.x * blockIdx.x;
+${3}
+endsnippet
+
+snippet idtx
+${1:int} ${2:tx} = threadIdx.x;
+${3}
+endsnippet
+
+snippet idbx
+${1:int} ${2:bx} = blockIdx.x;
+${3}
+endsnippet
+
+snippet shared
+__shared__ ${2:type} ${3:s[N];}
+endsnippet
+
+# Thrust
+
+## Variables
+snippet hvector
+thrust::host_vector<${1:type}> ${2:h_v}(${3:N});
+${4}
+endsnippet
+snippet dvector
+thrust::device_vector<${1:type}> ${2:d_v}(${3:N});
+${4}
+endsnippet
+snippet dptr
+thrust::device_ptr<${1:type}> ${2:d_ptr}(${3:raw_ptr});
+${4}
+endsnippet
+
+## Functions
+snippet sort
+thrust::sort(${1:d_v.begin()}, ${2:d_v.end()});
+${3}
+endsnippet
+
+snippet fill
+thrust::fill(${1:d_v.begin()},${2:d_v.end()},${3:0});
+${4}
+endsnippet
+
+snippet seq
+thrust::sequence(${1:d_v.begin()},${2:d_v.end()});
+${3}
+endsnippet
+
+snippet copy
+thrust::copy(${1:orig_v.begin()}, ${2:orig_v.end()}, ${3:dest_v.begin()});
+${4}
+endsnippet
+
+snippet transform
+thrust::transform(${1:d_x.begin()}, ${2:d_x.end()}, ${3:d_y.begin()}, ${4:thrust::foo}<${5:type}>()});
+${6}
+endsnippet
+
+snippet replace
+thrust::replace(${1:d_x.begin()},${2:d_x.end()},${3:orig_value},${4:dest_value});
+${5}
+endsnippet
+
+snippet dmalloc
+thrust::device_malloc<${1:type}>(${2:N});
+${3}
+endsnippet
+
+snippet ptrcast
+thrust::raw_pointer_cast(${1:d_v});
+${2}
+endsnippet
