@@ -10,8 +10,9 @@
 #define TERMINUS12 -*-terminus-medium-r-normal--12-*-*-*-c-*-UTFENC
 #define TERMINUS14 -*-terminus-medium-r-normal--14-*-*-*-c-*-UTFENC
 #define TERMINUS16 -*-terminus-medium-r-normal--16-*-*-*-c-*-UTFENC
-#define DEJA14     xft:DejaVu Sans Mono:pixelsize=14
-#define DEJABOLD14 xft:DejaVu Sans Mono:style=bold:pixelsize=14
+#define DEJAVU14   xft:DejaVu Sans Mono:antialias=true:autohint=true:pixelsize=14
+#define DEJAVU14B  xft:DejaVu Sans Mono:style=bold:antialias=true:autohint=true:pixelsize=14
+#define DEJAVU14I  xft:DejaVu Sans Mono:style=italic:antialias=true:autohint=true:pixelsize=14
 ! }}}
 
 ! ## XFT {{{
@@ -26,12 +27,15 @@ Xft.rgba:      rgb
 
 ! ## XTERM {{{
 XTerm*faceName: DejaVu Sans Mono:pixelsize=14
+XTerm.allow_bold:         true
 ! }}}
 
 ! ## URXVT {{{
-URxvt.font:     DEJA14
-URxvt.boldfont: DEJABOLD14
+URxvt.font:               DEJAVU14
+URxvt.boldfont:           DEJAVU14B
+URxvt.italicfont:         DEJAVU14I
 
+URxvt.allow_bold:         true
 URxvt.meta8:              false
 URxvt.intensityStyles:    false
 URxvt.depth:              32
@@ -52,25 +56,19 @@ URxvt.secondaryWheel:     true
 URxvt.mapAlert:           true
 URxvt.utmpInhibit:        true
 URxvt.urgentOnBell:       false
-URxvt.perl-ext-common:    default,matcher,-searchable-scrollback,-option-popup,-selection-popup,-readline
+URxvt.perl-ext-common:    default,matcher,font-size,-option-popup,-selection-popup,-readline
 URxvt.url-launcher:       firefox
 URxvt.matcher.button:     1
+URxvt.searchable-scrollback: C-M-s
 
-! change font with Ctrl-Fn keys
-URxvt*keysym.C-F1: command:\033]710;DEJA14\007
-URxvt*keysym.C-F2: command:\033]710;xft:DejaVu Sans Mono:pixelsize=9\007
-URxvt*keysym.C-F3: command:\033]710;xft:DejaVu Sans Mono:pixelsize=10\007
-URxvt*keysym.C-F4: command:\033]710;xft:DejaVu Sans Mono:pixelsize=11\007
-URxvt*keysym.C-F5: command:\033]710;xft:DejaVu Sans Mono:pixelsize=12\007
-URxvt*keysym.C-F6: command:\033]710;xft:DejaVu Sans Mono:pixelsize=13\007
-URxvt*keysym.C-F7: command:\033]710;xft:DejaVu Sans Mono:pixelsize=16\007
-URxvt*keysym.C-F8: command:\033]710;xft:DejaVu Sans Mono:pixelsize=18\007
-URxvt*keysym.C-F9: command:\033]710;xft:DejaVu Sans Mono:pixelsize=20\007
-URxvt*keysym.C-F10:command:\033]710;FIXED-normal--12-*-*-*-c-*-UTFENC\007
-URxvt*keysym.C-F11:command:\033]710;TERMINUS12\007
-URxvt*keysym.C-F12:command:\033]710;TERMINUS14\007
+! change font with Ctrl-Fn keys, font size with Ctrl +/-
+URxvt.keysym.C-F1: command:\033]710;DEJA14\007
+URxvt.keysym.C-F2: command:\033]710;TERMINUS14\007
+URxvt.keysym.C-F3: command:\033]710;ANONPRO14\007
 
-! make some key combinations work
+URxvt.keysym.C-KP_Add: perl:font-size:increase
+URxvt.keysym.C-KP_Subtract: perl:font-size:decrease
+
 URxvt.keysym.S-Up:      \033[1;2A
 URxvt.keysym.S-Down:    \033[1;2B
 URxvt.keysym.S-Right:   \033[1;2C
