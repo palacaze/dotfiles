@@ -534,9 +534,10 @@ inoremap    <F9>            <C-O>:set list!<CR>
 nnoremap    <F10>           :RainbowParenthesesToggle<CR>
 inoremap    <F10>           <C-O>:RainbowParenthesesToggle<CR>
 
-noremap     <F11>           :update<CR>
-vnoremap    <F11>           <C-C>:update<CR>
-inoremap    <F11>           <C-O>:update<CR>
+noremap     <silent> <F11>  :call <SID>StripTrailingSpaces()<CR>
+inoremap    <silent> <F11>  <C-O>:call <SID>StripTrailingSpaces()<CR>
+vnoremap    <silent> <F11>  <C-C>:call <SID>StripTrailingSpaces()<CR>
+
 nnoremap    <silent> <F12>  :call UpdateTags()<CR>
 inoremap    <silent> <F12>  <C-O>:call UpdateTags()<CR>
 "}}}
@@ -620,6 +621,12 @@ if has('eval')
             :silent update!
         endif
     endfunction
+
+    " Function removing trailing spaces
+    function! <SID>StripTrailingSpaces()
+        normal mZ
+        silent! %s/\s\+$//e
+        normal `Z
     endfunction
 endif
 
