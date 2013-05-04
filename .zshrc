@@ -89,6 +89,28 @@ if [ -x /usr/bin/dircolors ]; then
   fi
 fi
 
+# colors in linux TTY console
+if [ "$TERM" = "linux" ]; then
+    echo -en "\e]P0353535" #
+    echo -en "\e]P1D81860" #
+    echo -en "\e]P2B7CE42" #
+    echo -en "\e]P3FEA63C" #
+    echo -en "\e]P46F99B4" #
+    echo -en "\e]P58B7B8B" #
+    echo -en "\e]P6A7A15E" #
+    echo -en "\e]P7DDDDDD" #
+    echo -en "\e]P8666666" #
+    echo -en "\e]P9F00060" #
+    echo -en "\e]PABDE077" #
+    echo -en "\e]PBFFE863" #
+    echo -en "\e]PC7C96B0" #
+    echo -en "\e]PDD8BFD8" #
+    echo -en "\e]PEF0E68C" #
+    echo -en "\e]PFFFFFFF" #
+    clear # Clear artifacts
+fi
+
+
 ZSH_HIGHLIGHT_STYLES[globbing]='fg=yellow'
 ZSH_HIGHLIGHT_STYLES[path]='bold'
 

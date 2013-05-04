@@ -1,30 +1,33 @@
 !black
-URxvt.color0:  #353535
-URxvt.color8:  #666666
+*color0:  #353535
+*color8:  #666666
 !red
-URxvt.color1:  #D81860
-URxvt.color9:  #F00060
+*color1:  #D81860
+*color9:  #F00060
 !green
-URxvt.color2:  #B7CE42
-URxvt.color10: #BDE077
+*color2:  #B7CE42
+*color10: #BDE077
 !brown/yellow
-URxvt.color3:  #FEA63C
-URxvt.color11: #FFE863
+*color3:  #FEA63C
+*color11: #FFE863
 !blue
-URxvt.color4:  #6F99B4
-URxvt.color12: #7C96B0
+*color4:  #6F99B4
+*color12: #7C96B0
 !magenta
-URxvt.color5:  #8B7B8B
-URxvt.color13: #D8BFD8
+*color5:  #8B7B8B
+*color13: #D8BFD8
 !cyan
-URxvt.color6:  #A7A15E
-URxvt.color14: #F0E68C
+*color6:  #038e82
+*color14: #05d2c1
+! *color6:  #A7A15E
+! *color14: #F0E68C
 !white
-URxvt.color7:  #DDDDDD
-URxvt.color15: #FFFFFF
+*color7:  #DDDDDD
+*color15: #FFFFFF
 
-URxvt.background: [85]#101010
-URxvt.foreground: #DDDDDD
+*background: #1c1c1c
+*foreground: #a8a8a8
+*cursorColor: #D0D0D0
 
 
 
