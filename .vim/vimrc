@@ -150,6 +150,13 @@ if !has('win32')
     set termencoding=utf-8
 endif
 
+if &term =~ '256color'
+    " Disable Background Color Erase (BCE) so that color schemes
+    " work properly when Vim is used inside tmux and GNU screen.
+    " See also http://snk.tuxfamily.org/log/vim-256color-bce.html
+    set t_ut=
+endif
+
 if has('gui_running') || &t_Co > 2
     syntax on
     set background=dark
@@ -399,22 +406,34 @@ vmap        <M-a>,          :Tabularize /,<CR>
 nmap        <M-a><Bar>      :Tabularize /<Bar><CR>
 vmap        <M-a><Bar>      :Tabularize /<Bar><CR>
 
-" tab control (alla firefox)
-nmap        <C-S-tab>       :tabprevious<CR>
-nmap        <C-tab>         :tabnext<CR>
+" tab control
+nnoremap    <C-PageUp>      :tabp<CR>
+nnoremap    <C-PageDown>    :tabn<CR>
+inoremap    <C-PageUp>      <C-O>:tabp<CR>
+inoremap    <C-PageDown>    <C-O>:tabn<CR>
 nmap        <C-t>           :tabnew<CR>
-map         <C-S-tab>       :tabprevious<CR>
-map         <C-tab>         :tabnext<CR>
-imap        <C-S-tab>       <C-O>:tabprevious<CR>
-imap        <C-tab>         <C-O>:tabnext<CR>
 imap        <C-t>           <C-O>:tabnew<CR>
 
-" fuzzyfinder_textmate
-nmap        ,f              :FuzzyFinderFile<CR>
-nmap        ,b              :FuzzyFinderBuffer<CR>
-nmap        ,t              :FuzzyFinderTag<CR>
+" window control: moving between windows and resizing
+nmap        <C-k>           <C-w>c
+map         <S-Up>          <C-w><Up>
+imap        <S-Up>          <C-O><C-W><Up>
+map         <S-Down>        <C-w><Down>
+imap        <S-Down>        <C-O><C-W><Down>
+map         <S-Right>       <C-w><Right>
+imap        <S-Right>       <C-O><C-W><Right>
+map         <S-Left>        <C-w><Left>
+imap        <S-Left>        <C-O><C-W><Left>
+map         <C-S-Up>        <C-w>2+
+imap        <C-S-Up>        <C-O><C-W>2+
+map         <C-S-Down>      <C-w>2-
+imap        <C-S-Down>      <C-O><C-W>2-
+map         <C-S-Right>     <C-w>2>
+imap        <C-S-Right>     <C-O><C-W>2>
+map         <C-S-Left>      <C-w>2<
+imap        <C-S-Left>      <C-O><C-W>2<
 
-nmap        ,e              :exe 'tabe ' . expand(MYVIMFILES) . '/vimrc'<CR>
+nmap        ,e              :exe 'tabe ' . expand(g:my_vimfiles_dir) . '/vimrc'<CR>
 
 " F keys
 nnoremap    <silent> <F1>   K
@@ -427,10 +446,6 @@ nmap    <silent> <F3>   zr
 vmap    <silent> <F3>   <C-C>zr
 imap    <silent> <F3>   <C-O>zr
 
-nnoremap    <S-F2>          :bp<CR>
-inoremap    <S-F2>          <C-O>:bp<CR>
-nnoremap    <S-F3>          :bn<CR>
-inoremap    <S-F3>          <C-O>:bn<CR>
 
 nnoremap    <silent> <F4>   :silent nohlsearch<CR>
 inoremap    <silent> <F4>   <C-O>:silent nohlsearch<CR>
@@ -465,6 +480,7 @@ inoremap    <silent> <F12>  <C-O>:call UpdateTags()<CR>
 " Settings for commentary
 autocmd FileType cmake set commentstring=#\ %s
 autocmd FileType xdefaults set commentstring=!\ %s
+autocmd FileType tmux set commentstring=#\ %s
 
 " Settings for Explorer.vim
 let g:explHideFiles='^\.'

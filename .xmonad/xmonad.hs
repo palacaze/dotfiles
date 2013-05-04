@@ -131,8 +131,8 @@ myManageHook =  composeAll
     , className =? "Gimp"           --> doFloat
     , className =? "xfce4-notifyd"  --> doIgnore
     , className =? "Firefox"        --> doShift " 1 "
-    , className =? "Thunderbird"    --> doShift " 3 "
-    , resource  =? "irssi"          --> doShift " 2 "
+    , className =? "Thunderbird"    --> doShift " 2 "
+    , resource  =? "irssi"          --> doShift " 3 "
     ] <+> namedScratchpadManageHook myScratchPads 
 
 
@@ -212,10 +212,10 @@ myKeys =
     [ ("M-a " ++ k, S.selectSearch f) | (k,f) <- searchList
     ] ++
 
-    [ ("C-M1-<Right>",    moveTo Next (WSIs notNSP))
-    , ("C-M1-<Left>",     moveTo Prev (WSIs notNSP))
-    , ("C-M1-S-<Right>",  shiftTo Next (WSIs notNSP))
-    , ("C-M1-S-<Left>",   shiftTo Prev (WSIs notNSP))
+    [ ("M-S-<Right>",  moveTo Next (WSIs notNSP))
+    , ("M-S-<Left>",   moveTo Prev (WSIs notNSP))
+    , ("M-S-<Up>",     shiftTo Next (WSIs notNSP))
+    , ("M-S-<Down>",   shiftTo Prev (WSIs notNSP))
 
     , ("C-M-<Right>",  sendMessage Expand)
     , ("C-M-<Left>",   sendMessage Shrink)

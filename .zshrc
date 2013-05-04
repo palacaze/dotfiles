@@ -116,8 +116,6 @@ ZSH_HIGHLIGHT_STYLES[globbing]='fg=yellow'
 ZSH_HIGHLIGHT_STYLES[path]='bold'
 
 
-# PATH="~/code/qprofilo-deps/bin:~/gentoo/Scripts:$PATH"
-# PATH="$HOME/Projects/SNCF/catenaire/exe:$PATH"
 export PATH="$HOME/travail/software/mxe/usr/bin:$PATH"
 export C_INCLUDE_PATH="$HOME/local/include"
 export CPLUS_INCLUDE_PATH="$HOME/local/include"
@@ -132,7 +130,7 @@ alias mv='mv --interactive'
 # alias rm='rm --interactive'
 alias nice="ionice -c2 -n7 nice"
 alias top='htop'
-alias tmux='tmux -2'
+alias tmux='tmux -2 -u'
 alias scpresume="rsync --partial --progress --rsh=ssh"
 alias m='ncmpcpp'
 alias vv='vim ~/.vim/vimrc'
@@ -140,6 +138,7 @@ alias vz='vim ~/.zshrc'
 alias vx='vim ~/.xmonad/xmonad.hs'
 alias vs='vim ~/.xsession'
 alias vX='vim ~/.Xresources'
+alias vt='vim ~/.tmux.conf'
 alias t='thunar&'
 
 

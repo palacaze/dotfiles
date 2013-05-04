@@ -28,6 +28,7 @@ Xft.rgba:      rgb
 ! ## XTERM {{{
 XTerm*faceName: DejaVu Sans Mono:pixelsize=14
 XTerm.allow_bold:         true
+XTerm.meta8:              false
 ! }}}
 
 ! ## URXVT {{{
@@ -69,20 +70,44 @@ URxvt.keysym.C-F3: command:\033]710;ANONPRO14\007
 URxvt.keysym.C-KP_Add: perl:font-size:increase
 URxvt.keysym.C-KP_Subtract: perl:font-size:decrease
 
+! make the key combinations mimick xterm
 URxvt.keysym.S-Up:      \033[1;2A
 URxvt.keysym.S-Down:    \033[1;2B
 URxvt.keysym.S-Right:   \033[1;2C
 URxvt.keysym.S-Left:    \033[1;2D
 URxvt.keysym.S-Home:    \033[1;2H
 URxvt.keysym.S-End:     \033[1;2F
+! do not change this, used in urxvt for content scrolling
+! URxvt.keysym.S-Prior:   \033[5;2~
+! URxvt.keysym.S-Next:    \033[6;2~
+
+URxvt.keysym.M-Up:      \033[1;3A
+URxvt.keysym.M-Down:    \033[1;3B
+URxvt.keysym.M-Right:   \033[1;3C
+URxvt.keysym.M-Left:    \033[1;3D
+URxvt.keysym.M-End:     \033[1;3F
+URxvt.keysym.M-Home:    \033[1;3H
+URxvt.keysym.M-Prior:   \033[5;3~
+URxvt.keysym.M-Next:    \033[6;3~
+
 URxvt.keysym.C-Up:      \033[1;5A
 URxvt.keysym.C-Down:    \033[1;5B
 URxvt.keysym.C-Right:   \033[1;5C
 URxvt.keysym.C-Left:    \033[1;5D
+URxvt.keysym.C-Home:    \033[1;5H
+URxvt.keysym.C-End:     \033[1;5F
+URxvt.keysym.C-Prior:   \033[5;5~
+URxvt.keysym.C-Next:    \033[6;5~
+
 URxvt.keysym.C-S-Up:    \033[1;6A
 URxvt.keysym.C-S-Down:  \033[1;6B
 URxvt.keysym.C-S-Right: \033[1;6C
 URxvt.keysym.C-S-Left:  \033[1;6D
+
+URxvt.keysym.C-M-Up:    \033[1;7A
+URxvt.keysym.C-M-Down:  \033[1;7B
+URxvt.keysym.C-M-Right: \033[1;7C
+URxvt.keysym.C-M-Left:  \033[1;7D
 ! }}}
 
 ! ## XCURSOR {{{
