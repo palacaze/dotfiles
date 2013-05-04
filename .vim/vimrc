@@ -257,6 +257,9 @@ set shortmess=atI        " remove useless messages
 set lazyredraw           " speedup processing
 set ttyfast
 
+" set fillchars+=fold:.
+set foldmethod=marker
+
 " Nice window title stolen from ciaranm
 if has('title') && (has('gui_running') || &title)
     set titlestring=
@@ -522,17 +525,17 @@ nmap        ,e              :exe 'tabe ' . expand(g:my_vimfiles_dir) . '/vimrc'<
 
 map         <C-tab>         :BufstopBack<CR>
 map         <S-tab>         :BufstopForward<CR>
+
 " F keys
-nnoremap    <silent> <F1>   K
-inoremap    <silent> <F1>   <C-O>K
+nnoremap    <F1>            K
+inoremap    <F1>            <C-O>K
 
-nmap    <silent> <F2>   zm
-vmap    <silent> <F2>   <C-C>zm
-imap    <silent> <F2>   <C-O>zm
-nmap    <silent> <F3>   zr
-vmap    <silent> <F3>   <C-C>zr
-imap    <silent> <F3>   <C-O>zr
-
+nnoremap    <silent> <F2>   zm
+vnoremap    <silent> <F2>   <C-C>zm
+inoremap    <silent> <F2>   <C-O>zm
+nnoremap    <silent> <F3>   zr
+vnoremap    <silent> <F3>   <C-C>zr
+inoremap    <silent> <F3>   <C-O>zr
 
 nnoremap    <silent> <F4>   :silent nohlsearch<CR>
 inoremap    <silent> <F4>   <C-O>:silent nohlsearch<CR>
@@ -558,8 +561,8 @@ noremap     <silent> <F11>  :call <SID>StripTrailingSpaces()<CR>
 inoremap    <silent> <F11>  <C-O>:call <SID>StripTrailingSpaces()<CR>
 vnoremap    <silent> <F11>  <C-C>:call <SID>StripTrailingSpaces()<CR>
 
-nnoremap    <silent> <F12>  :call UpdateTags()<CR>
-inoremap    <silent> <F12>  <C-O>:call UpdateTags()<CR>
+nnoremap    <silent> <F12>  :call <SID>UpdateTags()<CR>
+inoremap    <silent> <F12>  <C-O>:call <SID>UpdateTags()<CR>
 "}}}
 
 "{{{            Plugins settings
@@ -640,7 +643,7 @@ let g:notes_title_sync = 'no'
 "-----------------------------------------------
 if has('eval')
     " automatically save tags in appropriate file
-    fun! UpdateTags()
+    fun! <SID>UpdateTags()
         let _ctags_cl_ = 'ctags -N -R --c++-kinds=+p --fields=+iaS --extra=+q -IG_DEFINE_TYPE+ .'
         let _resp_ = system(_ctags_cl_)
     endfun
