@@ -239,9 +239,12 @@ myKeys =
         myToggle = windows $ W.view =<< W.tag . head . filter
                    ((\x -> x /= "NSP") . W.tag) . W.hidden
 
+gentooBugsEngine = S.searchEngine "Gentoo Bugzilla" "https://bugs.gentoo.org/buglist.cgi?quicksearch=ALL+"
+
 searchList :: [(String, S.SearchEngine)]
 searchList =  [ ("g", S.google)
               , ("w", S.wikipedia)
+              , ("b", gentooBugsEngine)
               ]
 
 myConf = withUrgencyHook NoUrgencyHook $ ewmh azertyConfig
