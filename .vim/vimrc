@@ -149,7 +149,7 @@ NeoBundle 'clibs.vim'
 NeoBundleCheck
 " }}}
 
-" {{{            Generic Settings - 2nd part
+"{{{            Generic Settings - 2nd part
 "-----------------------------------------------
 filetype on
 filetype plugin on
@@ -201,7 +201,7 @@ set number
 set hidden
 set showmatch
 set showcmd
-set showmode
+set noshowmode
 set laststatus=2 " always show the status line
 
 " set cmdheight=2
@@ -220,6 +220,7 @@ if has('gui_running')
     set columns=130
 endif
 
+set display+=lastline
 " tab complete menu
 set wildmenu
 set wildmode=list:longest,full
@@ -538,7 +539,7 @@ endif
 "-----------------------------------------------
 if has('autocmd')
     " turn off any existing search
-    au VimEnter * nohls
+    au VimEnter * nohlsearch
 
     " automatically open and close the popup menu / preview window
     au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
@@ -562,13 +563,13 @@ if has('autocmd')
                 \   exe "normal g`\"" |
                 \ endif
 
-    " " Don't automatically insert a comment command when entering insert mode with o
+    " Don't automatically insert a comment command when entering insert mode with o
     au FileType * setl formatoptions-=o
 
-    " " But do when hitting enter on a comment line, or when wrapping
+    " But do when hitting enter on a comment line, or when wrapping
     au FileType * setl formatoptions+=tcrq
 
-    " au syntax * call rainbow_parentheses#activate() 
+    " au syntax * call rainbow_parentheses#activate()
 
 endif
 "}}}
