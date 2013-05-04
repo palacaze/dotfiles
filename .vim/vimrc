@@ -63,7 +63,7 @@ NeoBundle 'Shougo/vimproc', {
 
 " A fast, as-you-type, fuzzy-search code completion engine for Vim
 NeoBundle 'Valloric/YouCompleteMe', {
-    \ 'build' : {'unix' : './install.sh --clang-completer' }}
+    \ 'build' : {'unix' : 'sh ~/.vim/ycm_build.sh' }}
 
 " Syntax checking hacks for vim
 NeoBundle 'scrooloose/syntastic'
