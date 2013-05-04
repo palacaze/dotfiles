@@ -97,6 +97,7 @@ NeoBundle 'plasticboy/vim-markdown'
 
 " surround.vim: quoting/parenthesizing made simple
 NeoBundle 'tpope/vim-surround'
+
 " Fix repeat in a number of plugins.
 NeoBundle 'tpope/vim-repeat'
 
@@ -180,12 +181,23 @@ if has('gui_running') || &t_Co > 2
     set background=dark
     set popt+=syntax:y " syntax when printing
 
-    if $COLORTERM == "gnome-terminal" || $TERM == "screen-256color"
-       \ || $TERM == "rxvt-unicode"   || $TERM == "rxvt-unicode-256color"
+    if $COLORTERM == "gnome-terminal"
+       \ || $TERM == "screen"       || $TERM == "screen-256color"
+       \ || $TERM == "rxvt-unicode" || $TERM == "rxvt-unicode-256color"
+       \ || $TERM == "xterm"        || $TERM == "xterm-256color"
         set t_Co=256
-        " bar cursor in insert mode, for this to work rxvt-unicode must be patched
-        let &t_SI = "\033]12\007\033[5 q"
-        let &t_EI = "\033]12\007\033[0 q"
+        " Change to a bar cursor in insert mode
+        " It works at least with xterm and rxvt-unicode, even inside a tmux
+        " session.
+        " For this to work for rxvt-unicode it must be patched. See at:
+        " https://github.com/yoran-brault/patchs
+        if exists('$TMUX')
+            let &t_SI .= "\033Ptmux;\033\033[5 q\007\033\\"
+            let &t_EI .= "\033Ptmux;\033\033[0 q\007\033\\"
+        else
+            let &t_SI .= "\033[5 q"
+            let &t_EI .= "\033[0 q"
+        endif
         colorscheme macarons
     elseif has('gui_running') || &t_Co >= 88
         colorscheme macarons
