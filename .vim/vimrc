@@ -89,18 +89,6 @@ NeoBundle 'a.vim'
 " File explorer
 NeoBundle 'scrooloose/nerdtree'
 
-" Show colored guides along indent levels, to help with alignment and spacing.
-NeoBundle 'nathanaelkane/vim-indent-guides'
-
-" A colorscheme with light and dark variants.
-NeoBundle 'altercation/vim-colors-solarized'
-
-" Tools to remove trailing whitespace.
-NeoBundle 'DeleteTrailingWhitespace'
-
-" Better character finding.
-NeoBundle 'dahu/vim-fanfingtastic'
-
 " Better matching with %.
 NeoBundle 'matchit.zip'
 
