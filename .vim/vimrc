@@ -134,6 +134,14 @@ NeoBundle 'clibs.vim'
 
 " Quicktask is a lightweight Vim task management plugin
 NeoBundle 'xolox/vim-notes'
+
+" colorscheme making stuff
+" A Vim plugin to colorize all text in the form #rrggbb or #rgb
+NeoBundle 'lilydjwg/colorizer'
+
+" All 256 xterm colors with their RGB equivalents, right in Vim!
+NeoBundle 'guns/xterm-color-table.vim'
+
 NeoBundleCheck
 " }}}
 
