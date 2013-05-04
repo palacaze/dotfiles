@@ -236,6 +236,9 @@ set winminwidth=0
 
 set splitbelow splitright
 
+set scrolloff=3 " at least one line after cursor
+set sidescrolloff=2
+
 " attempt to set the default position (and size) on win32
 if has('win32')
     winpos 342 0
@@ -264,6 +267,7 @@ endif
 set ttimeout timeoutlen=1000 ttimeoutlen=10
 
 " set updatetime=500       " tag preview
+set conceallevel=2
 set guioptions=imrRbate  " remove useless UI
 set shortmess=atI        " remove useless messages
 set lazyredraw           " speedup processing
@@ -353,7 +357,6 @@ endif
 set virtualedit=block,onemore
 set backspace=indent,eol,start  " make backspace delete anything
 
-set fileformats=unix,dos,mac
 set encoding=utf8
 
 set fileformats=unix,dos,mac
@@ -369,7 +372,6 @@ function! <SID>check_pager_mode()
     endif
 endfunction
 au VimEnter * :call <SID>check_pager_mode()
-set fileencoding=utf8
 
 set formatoptions=tcrqn
 
@@ -417,53 +419,66 @@ set smartcase
 
 "{{{            Programming
 "-----------------------------------------------
-" let &tags = expand(MYVIMFILES) . '/tags/tags_gtk,' . expand(MYVIMFILES) . '/tags/tags_opencv,tags;/'
 set tags=./tags;
+
+set path+=src/
 
 set completeopt=menu,preview,longest
 set showfulltag
-set foldmethod=marker
 "}}}
 
 "{{{            Key Bindings
 "-----------------------------------------------
 
+" Make Vim recognize xterm escape sequences for Page and Arrow
+" keys combined with modifiers such as Shift, Control, and Alt.
+" See http://www.reddit.com/r/vim/comments/1a29vk/_/c8tze8p
+if &term =~ '^screen'
+    " Page keys http://sourceforge.net/p/tmux/tmux-code/ci/master/tree/FAQ
+    execute "set t_kP=\e[5;*~"
+    execute "set t_kN=\e[6;*~"
+
+    " Arrow keys http://unix.stackexchange.com/a/34723
+    execute "set <xUp>=\e[1;*A"
+    execute "set <xDown>=\e[1;*B"
+    execute "set <xRight>=\e[1;*C"
+    execute "set <xLeft>=\e[1;*D"
+endif
+
+" Function used to map keys not working correctly in terms
+let g:spare_key_index = 14
+function! <SID>MapKeyCode(key, keyCode)
+    if g:spare_key_index < 38
+        let l:prefix="F".g:spare_key_index
+    else
+        let l:prefix="S-F".(g:spare_key_index - 25)
+    endif
+    let spare_key="<".l:prefix.">"
+    execute("set ".spare_key."=".a:keyCode)
+    execute("map ".spare_key." <".a:key.">")
+    execute("map! ".spare_key." <".a:key.">")
+    let g:spare_key_index += 1
+endfunction
+
 " make meta keys 'work' on terminal vim. For this to work the terminal
 " must send escape sequences instead of Alt keycodes
 if !has('gui_running')
-    set <F13>=x
-    map <F13> <M-x>
-    map! <F13> <M-x>
-
-    set <F14>=c
-    map <F14> <M-c>
-    map! <F14> <M-c>
-  
-    set <F15>=s
-    map <F15> <M-s>
-    map! <F15> <M-s>
-  
-    set <F16>=q
-    map <F16> <M-q>
-    map! <F16> <M-q>
-  
-    set <F17>=a
-    map <F17> <M-a>
-    map! <F17> <M-a>
+    call <SID>MapKeyCode('M-x', 'x')
+    call <SID>MapKeyCode('M-c', 'c')
+    call <SID>MapKeyCode('M-s', 's')
+    call <SID>MapKeyCode('M-q', 'q')
+    call <SID>MapKeyCode('M-a', 'a')
 endif
 
 " change annoying behaviours
 vnoremap    <BS>            d
 inoremap    #               X<BS>#
 nmap        q:              :q
-noremap     Q               gq
 nnoremap    Y               y$
 
 " easy indenting
 vnoremap    <               <gv
 vnoremap    >               >gv
-vmap        <Tab>           >
-vmap        <S-Tab>         <
 
 " insert new line without going into insert mode
 map         <Enter>         o<ESC>
@@ -471,6 +486,14 @@ map         <S-Enter>       O<ESC>
 
 " Space will toggle folds
 nnoremap    <space>         za
+
+nmap        z1              :setlocal foldlevel=0<CR>
+nmap        z2              :setlocal foldlevel=1<CR>
+nmap        z3              :setlocal foldlevel=2<CR>
+nmap        z4              :setlocal foldlevel=3<CR>
+nmap        z5              :setlocal foldlevel=4<CR>
+nmap        z6              :setlocal foldlevel=6<CR>
+nmap        z0              :setlocal foldlevel=9999<CR>
 
 " Use ALT-S for saving, also in Insert mode
 nmap        <C-s>           :update<CR>
@@ -491,7 +514,7 @@ vmap        <silent> <M-x>  gc
 imap        <silent> <M-x>  <C-O>gcc
 nmap        <silent> <M-c>  gccj
 imap        <silent> <M-c>  <C-O>gcc<C-O>j
- 
+
 " Align stuff with Tabularize
 nmap        <M-a>&          :Tabularize /&<CR>
 vmap        <M-a>&          :Tabularize /&<CR>
@@ -555,7 +578,6 @@ nnoremap    <silent> <F5>   :NERDTreeToggle<CR>
 inoremap    <silent> <F5>   <C-O>:NERDTreeToggle<CR>
 nnoremap    <silent> <F6>   :TagbarToggle<CR>
 inoremap    <silent> <F6>   <C-O>:TagbarToggle<CR>
-
 
 nnoremap    <F7>            :set invpaste paste?<CR>
 set pastetoggle=<F7>
