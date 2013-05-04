@@ -2,8 +2,9 @@
 " Maintainer:   Pierre-Antoine Lacaze
 
 
-" {{{            Generic Settings - 1st part
+"{{{            Generic Settings - 1st part
 "-----------------------------------------------
+scriptencoding utf-8
 set nocompatible
 set history=1000
 set viminfo='1000,:1000,/1000
@@ -13,30 +14,40 @@ set shellslash  " use normal slash for pathes under win32
 
 "{{{            Pathes & Backups
  "-----------------------------------------------
+let g:my_vimfiles_dir = has('win32') ? expand($VIM) . "/vimfiles" : "~/.vim"
+let s:my_cache_dir    = expand(g:my_vimfiles_dir) . "/cache"
+let s:my_backupdir    = expand(s:my_cache_dir) . "/backup//"
+let s:my_directory    = expand(s:my_cache_dir) . "/swap//"
+let s:my_undodir      = expand(s:my_cache_dir) . "/undo//"
+
+if !isdirectory(s:my_cache_dir)
+    call mkdir(s:my_cache_dir)
+endif
+if !isdirectory(s:my_backupdir)
+    call mkdir(s:my_backupdir)
+endif
+if !isdirectory(s:my_directory)
+    call mkdir(s:my_directory)
+endif
+if !isdirectory(s:my_undodir)
+    call mkdir(s:my_undodir)
+endif
+
+let &backupdir = expand(s:my_backupdir)
+let &directory = expand(s:my_directory)
+let &undodir   = expand(s:my_undodir)
+
 set backup " make a backup file
 set writebackup
 set swapfile
-if has('win32')
-    let MYVIMFILES = expand($VIM) . "/vimfiles"
-else
-    let MYVIMFILES = "~/.vim"
-endif
-let &backupdir = expand(MYVIMFILES) . "/backup//"
-if !isdirectory(&backupdir)
-    echo &backupdir . " does not exist, creating"
-    mkdir(&backupdir)
-endif
-let &directory = expand(MYVIMFILES) . "/temp//"
-if !isdirectory(&directory)
-    echo &directory . " does not exist, creating"
-    mkdir(&directory)
-endif
-let &makeef = expand(MYVIMFILES) . "/error.err"
+set undofile
+set undolevels=1000
+set undoreload=10000
 "}}}
 
 "{{{            Plugins management
-let &runtimepath .= ',' . expand(MYVIMFILES) . "/bundle/neobundle.vim/"
-call neobundle#rc(expand(MYVIMFILES) . "/bundle/")
+let &runtimepath .= ',' . expand(g:my_vimfiles_dir) . "/bundle/neobundle.vim/"
+call neobundle#rc(expand(g:my_vimfiles_dir) . "/bundle/")
 
 " Let NeoBundle manage NeoBundle
 NeoBundleFetch 'Shougo/neobundle.vim'
@@ -62,7 +73,6 @@ NeoBundle 'rking/ag.vim'
 
 " An implementation of TextMates Snippets for the Vim Text Editor
 NeoBundle 'palacaze/ultisnips'
-" let &runtimepath .= ',' . expand(MYVIMFILES) . "/bundle/ultisnips/ftdetect/"
 
 " Vim motions on speed!
 NeoBundle 'Lokaltog/vim-easymotion'
