@@ -73,9 +73,10 @@ export HISTFILE=$HOME/.history
 
 export BROWSER='firefox'
 export EDITOR=vim
-export PAGER='vimpager'
-export MANPAGER="vimmanpager"
-# alias less=$PAGER
+export PAGER=$HOME/bin/vimpager
+export MANPAGER=$PAGER
+alias less=$PAGER
+alias zless=$PAGER
 
 
 # Color

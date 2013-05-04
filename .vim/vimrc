@@ -110,9 +110,6 @@ NeoBundle 'tpope/vim-commentary'
 " A source code browser plugin for Vim
 NeoBundle 'majutsushi/tagbar'
 
-" ansi escape sequences concealed, but highlighted as specified 
-NeoBundle 'vim-scripts/AnsiEsc.vim'
-
 " Better rainbow paraentheses
 NeoBundle 'kien/rainbow_parentheses.vim'
 
@@ -248,6 +245,20 @@ set backspace=indent,eol,start  " make backspace delete anything
 
 set fileformats=unix,dos,mac
 set encoding=utf8
+
+set fileformats=unix,dos,mac
+" set fileencoding=utf8     " setting this wrecks havoc
+
+function! <SID>check_pager_mode()
+    if exists("g:loaded_less") && g:loaded_less
+        set laststatus=0
+        set ruler
+        set foldmethod=manual
+        set foldlevel=99
+        set nolist
+    endif
+endfunction
+au VimEnter * :call <SID>check_pager_mode()
 set fileencoding=utf8
 
 set formatoptions=tcrqn
