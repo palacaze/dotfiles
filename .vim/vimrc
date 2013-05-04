@@ -131,6 +131,9 @@ NeoBundle 'vim-scripts/Hints-for-C-Library-Functions-B'
 " Syntax highlighting for C library functions and constants 
 NeoBundle 'clibs.vim'
 
+
+" Quicktask is a lightweight Vim task management plugin
+NeoBundle 'xolox/vim-notes'
 NeoBundleCheck
 " }}}
 
@@ -511,7 +514,11 @@ let g:UltiSnipsSnippetDirectories=["UltiSnips", "snippets"]
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
- "}}}
+
+let g:notes_directory = "~/gentoo/notes"
+let g:notes_suffix = '.notes'
+let g:notes_title_sync = 'no'
+"}}}
 
 "{{{            Functions
 "-----------------------------------------------
@@ -524,11 +531,12 @@ if has('eval')
 
     runtime! macros/matchit.vim
 
-    " writes a file without changing it's modification date
-    function! WriteSmall()
-        let mtime = system("date -d @`stat -c %Y ".shellescape(expand('%:p')) . "`")
-        write
-        call system("touch --date='".mtime."' ".shellescape(expand('%:p')))
+    " Fonction d'autosauvegarde en cas de buffer modifié
+    function! <SID>AutoSave()
+        if &modified
+            :silent update!
+        endif
+    endfunction
     endfunction
 endif
 
@@ -551,6 +559,21 @@ if has('autocmd')
                 \ setlocal list |
                 \ setlocal expandtab |
                 \ setlocal comments-=:// comments+=f://
+
+    au BufNewFile,BufRead *.notes
+                \ setlocal foldmethod=manual |
+                \ setlocal foldlevel=99 |
+                \ setlocal nolist |
+                \ setlocal shiftwidth=2 |
+                \ setlocal softtabstop=2 |
+                \ setlocal laststatus=0 |
+                \ highlight notesRealURL ctermfg=blue cterm=underline |
+                \ highlight notesTextURL ctermfg=blue cterm=underline |
+                \ highlight notesUnixPath ctermfg=magenta cterm=underline
+
+    " we want notes saved automatically
+    autocmd CursorHold *.notes call <SID>AutoSave()
+    autocmd CursorHoldI *.notes call <SID>AutoSave()
 
     au FileType text
                 \ setlocal textwidth=78 |

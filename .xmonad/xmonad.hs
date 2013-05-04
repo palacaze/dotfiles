@@ -101,6 +101,7 @@ myLayout = windowNavigation $ mouseResize $ windowArrange $ smartBorders $ avoid
 myScratchPads = [ NS "terminal" spawnTerm   findTerm   manageTerm
                 , NS "music"    spawnMusic  findMusic  manageMusic
                 , NS "octave"   spawnOctave findOctave manageOctave
+                , NS "todo"     spawnTodo   findTodo   manageTodo
                 ]
     where
         spawnTerm    = myTerminal ++ " -name scratchterm"
@@ -112,6 +113,9 @@ myScratchPads = [ NS "terminal" spawnTerm   findTerm   manageTerm
         spawnOctave  = myTerminal ++ " -name octave -e octave -q"
         findOctave   = resource =?  "octave"
         manageOctave = customFloating $ W.RationalRect 0.2 0.2 0.6 0.6
+        spawnTodo    = myTerminal ++ " -name todo -e vim ~/gentoo/notes/TODO.notes"
+        findTodo     = resource =?  "todo"
+        manageTodo   = customFloating $ W.RationalRect 0.0 0.0 0.5 0.5
 
 
 myManageHook :: ManageHook
@@ -183,6 +187,7 @@ myKeys =
     , ("M-m",              namedScratchpadAction myScratchPads "music")
     , ("M-o",              namedScratchpadAction myScratchPads "octave")
     , ("<XF86Calculator>", namedScratchpadAction myScratchPads "octave")
+    , ("M-n",              namedScratchpadAction myScratchPads "todo")
 
     , ("M-f",        spawn "thunar")
     , ("C-M1-x",     spawn (myTerminal ++ " -e vim ~/.xmonad/xmonad.hs"))
