@@ -92,6 +92,11 @@ NeoBundle 'scrooloose/nerdtree'
 " Better matching with %.
 NeoBundle 'matchit.zip'
 
+" Markdown Vim Mode
+NeoBundle 'plasticboy/vim-markdown'
+
+" surround.vim: quoting/parenthesizing made simple
+NeoBundle 'tpope/vim-surround'
 " Fix repeat in a number of plugins.
 NeoBundle 'tpope/vim-repeat'
 
@@ -103,6 +108,9 @@ NeoBundle 'tpope/vim-fugitive'
 
 " A fuzzy file-finder, mru switcher, buffer finder, and more
 NeoBundle 'kien/ctrlp.vim'
+
+" Fast and efficient buffer switching for Vim
+NeoBundle 'mihaifm/bufstop'
 
 " commentary.vim: comment stuff out
 NeoBundle 'tpope/vim-commentary'
@@ -128,9 +136,11 @@ NeoBundle 'vim-scripts/Hints-for-C-Library-Functions'
 " Hints for C library Functions - man 3
 NeoBundle 'vim-scripts/Hints-for-C-Library-Functions-B'
 
-" Syntax highlighting for C library functions and constants 
+" Syntax highlighting for C library functions and constants
 NeoBundle 'clibs.vim'
 
+" True Sublime Text style multiple selections for Vim
+NeoBundle 'terryma/vim-multiple-cursors'
 
 " Quicktask is a lightweight Vim task management plugin
 NeoBundle 'xolox/vim-notes'
@@ -510,6 +520,8 @@ imap        <C-S-Left>      <C-O><C-W>2<
 
 nmap        ,e              :exe 'tabe ' . expand(g:my_vimfiles_dir) . '/vimrc'<CR>
 
+map         <C-tab>         :BufstopBack<CR>
+map         <S-tab>         :BufstopForward<CR>
 " F keys
 nnoremap    <silent> <F1>   K
 inoremap    <silent> <F1>   <C-O>K
@@ -591,11 +603,23 @@ let g:alternateExtensions_HH = "cc,c,CC,c"
 
 let glib_deprecated_errors = 1
 
-let g:solarized_termtrans = 1
-let g:solarized_termcolors = 256
+let g:ctrlp_cmd = 'CtrlPMRU'
+let g:ctrlp_switch_buffer = 'ET'
+let g:ctrlp_match_window_reversed = 0
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+let g:ctrlp_arg_map = 1
+let g:ctrlp_follow_symlinks = 1
+let g:ctrlp_extensions = ['tag', 'undo', 'line', 'mixed']
+
+let g:BufstopAutoSpeedToggle = 1
+
+let g:Powerline_symbols = 'unicode'
 
 " remove <tab> from the trigger keys because it hinders ultisnips
 let g:ycm_key_list_select_completion = ['<Down>']
+let g:ycm_key_list_select_completion = ['<Up>']
+let g:ycm_add_preview_to_completeopt = 1
+let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_autoclose_preview_window_after_completion = 1
 
 let g:snips_author = "Pierre-Antoine Lacaze"
