@@ -216,6 +216,8 @@ if has('gui_running')
 endif
 
 set display+=lastline
+set tabpagemax=50
+
 " tab complete menu
 set wildmenu
 set wildmode=list:longest,full
@@ -244,6 +246,71 @@ if has('title') && (has('gui_running') || &title)
     set titlestring+=%h%m%r%w                " flags
     set titlestring+=\ -\ %{v:progname}      " program name
     set titlestring+=\ -\ %{substitute(getcwd(),\ $HOME,\ '~',\ '')}  " working directory
+endif
+
+" nice tab line
+if exists("+showtabline")
+    function! MyTabLine()
+        let s = ''
+        for i in range(tabpagenr('$'))
+
+            " begin tab
+	    let s .= '%' . (i + 1) . 'T'
+            "number
+            let s .= '%1*' . (i + 1) . '%*:'
+
+            " select the highlighting
+            if i + 1 == tabpagenr()
+                let s .= '%#TabLineSel#'
+            else
+                let s .= '%#TabLine#'
+            endif
+
+            " name of currently selected window inside tab
+            let buf_list = tabpagebuflist(i + 1)
+            let winnr = tabpagewinnr(i + 1)
+	    let buf_name = bufname(buf_list[winnr - 1])
+            let buf_type = getbufvar( buf_name, "&buftype")
+            if buf_type == 'help'
+                let s .= '[H]' . fnamemodify(buf_name, ':t:s/.txt$//')
+            elseif buf_type == 'quickfix'
+                let s .= '[Q]'
+            else
+                let disp_name = fnamemodify(buf_name, ':p:t')
+                if disp_name == ''
+                    let s .= '[No Name]'
+                else
+                    let s .= disp_name
+                endif
+            endif
+
+            " count the number of modified buffers inside tab
+            let modif = 0
+            for b in buf_list
+                if getbufvar( b, "&modified")
+                    let modif += 1
+                endif
+            endfor
+
+            if modif > 0
+                let s .= '%2*'
+                if modif == 1
+                    let s .= '[+]'
+                else
+                    let s .= '[' . modif . '+]'
+                endif
+                let s .= '%*'
+            endif
+            if i + 1 < tabpagenr('$')
+                let s .= '%#TabLineFill#'
+                let s .= ' '
+            endif
+        endfor
+        let s .= '%T%#TabLineFill#%='
+        return s
+    endfunction
+    set showtabline=1
+    set tabline=%!MyTabLine()
 endif
 "}}}
 
