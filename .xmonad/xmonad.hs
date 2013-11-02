@@ -27,12 +27,13 @@ import XMonad.Actions.MouseResize
 import XMonad.Actions.GridSelect
 import qualified XMonad.Actions.Search as S
 import qualified XMonad.StackSet as W
+import qualified Data.Map as M
 import Data.List
 import System.IO
 import System.Exit
 
 
-myTerminal = "urxvtc"
+myTerminal = "urxvt"
 
 myFocusFollowsMouse = True
 
@@ -83,9 +84,20 @@ myDZenCalBar = "dzen-cal -W 1550 -w 270 -r 0 -h 18" ++
                " -hl '" ++ myGreenColor   ++ "'"
 
 
--- azerty keyboard keys mapped to workspace switching
-azertyWS = ["0x26","0xe9","0x22","0x27","0x28","0x2d","0xe8","0x5f","0xe7","0xe0"]
+-- make desktop switching work with bépo keyboard layout
+bepoConfig = defaultConfig { keys = bepoKeys <+> keys defaultConfig }
 
+bepoKeys conf@(XConfig {modMask = modm}) = M.fromList $
+    [((modm, xK_semicolon), sendMessage (IncMasterN (-1)))]
+    ++
+    [((m .|. modm, k), windows $ f i)
+        | (i, k) <- zip (workspaces conf) [0x22,0x3c,0x3e,0x28,0x29,0x40,0x2b,0x2d,0x2f,0x2a],
+          (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
+
+
+-- azerty keyboard keys mapped to workspace switching
+-- azertyWS = ["0x26","0xe9","0x22","0x27","0x28","0x2d","0xe8","0x5f","0xe7","0xe0"]
+bepoWS   = ["0x22","0x3c","0x3e","0x28","0x29","0x40","0x2b","0x2d","0x2f","0x2a"]
 
 myWorkspaces = [" 1 ", " 2 ", " 3 ", " 4 ", " 5 ", " 6 ", " 7 ", " 8 ", " 9 "]
 
@@ -158,7 +170,7 @@ myDZenLogHook dpipe = dzenPP
             where
                 wsIndex Nothing  = 0
                 wsIndex (Just n) = n
-                wskey = azertyWS !! wsIndex (elemIndex str myWorkspaces)
+                wskey = bepoWS !! wsIndex (elemIndex str myWorkspaces)
 
 
 myGSConfig = (buildDefaultGSConfig myColorizer)
@@ -173,7 +185,7 @@ myGSConfig = (buildDefaultGSConfig myColorizer)
                                else return (myDarkColor, myWhiteColor)
 
 
-myGridApps = ["nvidia-settings", "calibre", "deluge", "qtcreator", "inkscape", "gimp", "urxvtd -q -f -o"]
+myGridApps = ["nvidia-settings", "calibre", "deluge", "qtcreator", "EAC", "pavucontrol", "inkscape", "gimp", "urxvtd -q -f -o"]
 
 
 myRestart = "for pid in `pgrep dzen2`; do kill -9 $pid; done && xmonad --recompile && xmonad --restart"
@@ -185,25 +197,30 @@ myKeys =
 
     , ("M-s",              namedScratchpadAction myScratchPads "terminal")
     , ("M-m",              namedScratchpadAction myScratchPads "music")
-    , ("M-o",              namedScratchpadAction myScratchPads "octave")
     , ("<XF86Calculator>", namedScratchpadAction myScratchPads "octave")
     , ("M-n",              namedScratchpadAction myScratchPads "todo")
 
-    , ("M-f",        spawn "thunar")
+    , ("M-e",        spawn "thunar")
     , ("C-M1-x",     spawn (myTerminal ++ " -e vim ~/.xmonad/xmonad.hs"))
     , ("M-i",        raiseMaybe (runInTerm "-name irssi" "irssi") (resource =? "irssi"))
-    , ("M-w",        runOrRaise "firefox" (className =? "Firefox"))
-    , ("M-e",        runOrRaise "thunderbird" (className =? "Thunderbird"))
+    -- , ("M-w",        runOrRaise "firefox" (className =? "Firefox"))
+    -- , ("M-e",        runOrRaise "thunderbird" (className =? "Thunderbird"))
     , ("M-r",        shellPrompt myXPConfig)
     , ("M1-<F2>",    shellPrompt myXPConfig)
     , ("C-M1-l",     spawn "xscreensaver-command -lock")
-    , ("M1-<Print>", unsafeSpawn "sleep 0.2; scrot -s -e 'mv $f ~/screenshots/'")
+    , ("M1-<Print>", spawn "sleep 0.5; scrot -s -e 'mv $f ~/screenshots/'")
     , ("<Print>",    unsafeSpawn "scrot -e 'mv $f ~/screenshots/'")
     , ("M-v",        spawnSelected myGSConfig myGridApps)
 
+    , ("<XF86HomePage>",         runOrRaise "firefox" (className =? "Firefox"))
+    , ("<XF86Search>",           spawn "thunar")
+    , ("<XF86Mail>",             runOrRaise "thunderbird" (className =? "Thunderbird"))
+    , ("<XF86Favorites>",        spawn myTerminal)
     , ("<XF86AudioLowerVolume>", unsafeSpawn "amixer set Master 3%-")
     , ("<XF86AudioRaiseVolume>", unsafeSpawn "amixer set Master 3%+")
     , ("<XF86AudioMute>",        unsafeSpawn "amixer set Master toggle")
+    , ("<XF86AudioPrev>",        safeSpawn   "ncmpcpp" ["prev"])
+    , ("<XF86AudioNext>",        safeSpawn   "ncmpcpp" ["next"])
     , ("<XF86Launch8>",          safeSpawn   "ncmpcpp" ["prev"])
     , ("<XF86Launch9>",          safeSpawn   "ncmpcpp" ["next"])
     , ("<XF86AudioPlay>",        safeSpawn   "ncmpcpp" ["toggle"])
@@ -252,7 +269,7 @@ searchList =  [ ("g", S.google)
               , ("b", gentooBugsEngine)
               ]
 
-myConf = withUrgencyHook NoUrgencyHook $ ewmh azertyConfig
+myConf = withUrgencyHook NoUrgencyHook $ ewmh bepoConfig
     { modMask            = myModMask
     , terminal           = myTerminal
     , focusFollowsMouse  = myFocusFollowsMouse
