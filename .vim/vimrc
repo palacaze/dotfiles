@@ -61,30 +61,11 @@ NeoBundle 'Shougo/vimproc', {
     \    },
     \ }
 
-" A fast, as-you-type, fuzzy-search code completion engine for Vim
-NeoBundle 'Valloric/YouCompleteMe', {
-    \ 'build' : {'unix' : 'sh ~/.vim/ycm_build.sh' }}
-
-" Syntax checking hacks for vim
-NeoBundle 'scrooloose/syntastic'
-
-" Vim plugin for the_silver_searcher, 'ag'
-NeoBundle 'rking/ag.vim'
-
-" An implementation of TextMates Snippets for the Vim Text Editor
-NeoBundle 'palacaze/ultisnips'
-
-" Vim motions on speed!
-NeoBundle 'Lokaltog/vim-easymotion'
-
-" The ultimate vim statusline utility.
-NeoBundle 'Lokaltog/vim-powerline'
-
 " Automatically close quotes, parenthesis, braces, and other delimiters.
 NeoBundle 'Raimondi/delimitMate'
 
 " Alternate files quickly (.h --> .c)
-NeoBundle 'a.vim'
+NeoBundle 'dantler/vim-alternate'
 
 " File explorer
 NeoBundle 'scrooloose/nerdtree'
@@ -104,14 +85,8 @@ NeoBundle 'tpope/vim-repeat'
 " Epic automated alignment.
 NeoBundle 'godlygeek/tabular'
 
-" Awesome Git wrapper.
-NeoBundle 'tpope/vim-fugitive'
-
 " A fuzzy file-finder, mru switcher, buffer finder, and more
 NeoBundle 'kien/ctrlp.vim'
-
-" Fast and efficient buffer switching for Vim
-NeoBundle 'mihaifm/bufstop'
 
 " commentary.vim: comment stuff out
 NeoBundle 'tpope/vim-commentary'
@@ -144,14 +119,14 @@ NeoBundle 'clibs.vim'
 NeoBundle 'terryma/vim-multiple-cursors'
 
 " Quicktask is a lightweight Vim task management plugin
-NeoBundle 'xolox/vim-notes'
+NeoBundle 'xolox/vim-notes', { 'depends' : ['xolox/vim-misc'] }
 
 " colorscheme making stuff
 " A Vim plugin to colorize all text in the form #rrggbb or #rgb
-NeoBundle 'lilydjwg/colorizer'
+" NeoBundle 'lilydjwg/colorizer'
 
 " All 256 xterm colors with their RGB equivalents, right in Vim!
-NeoBundle 'guns/xterm-color-table.vim'
+" NeoBundle 'guns/xterm-color-table.vim'
 
 NeoBundleCheck
 " }}}
@@ -181,8 +156,10 @@ if has('gui_running') || &t_Co > 2
     set background=dark
     set popt+=syntax:y " syntax when printing
 
-    if $COLORTERM == "gnome-terminal"
-       \ || $TERM == "screen"       || $TERM == "screen-256color"
+    if $COLORTERM == "gnome-terminal" 
+        set t_Co=256
+        colorscheme macarons
+    elseif  $TERM == "screen"       || $TERM == "screen-256color"
        \ || $TERM == "rxvt-unicode" || $TERM == "rxvt-unicode-256color"
        \ || $TERM == "xterm"        || $TERM == "xterm-256color"
         set t_Co=256
@@ -228,6 +205,33 @@ set showmatch
 set showcmd
 set noshowmode
 set laststatus=2 " always show the status line
+
+set statusline=
+set statusline+=%-3.3n\                                 " buffer number
+set statusline+=%f\                                     " file name
+set statusline+=%{ScmInfo()}                            " git info
+set statusline+=%h%#warningmsg#%m%r%w%*                 " flags
+set statusline+=\[%{strlen(&ft)?&ft:'none'},            " filetype
+set statusline+=%{&encoding},                           " encoding
+set statusline+=%{&fileformat}]                         " file format
+set statusline+=%=                                      " right align
+set statusline+=0x%-8B\                                 " current char
+set statusline+=%-14.(%l,%c%V%)\ %<%P                   " offset
+
+" git info
+let g:scm_cache = {}
+fun! ScmInfo()
+    let l:key = getcwd()
+    if ! has_key(g:scm_cache, l:key)
+        if (isdirectory(getcwd() . "/.git"))
+            let g:scm_cache[l:key] = "[" . substitute(readfile(getcwd() . "/.git/HEAD", "", 1)[0],
+                        \ "^.*/", "", "") . "] "
+        else
+            let g:scm_cache[l:key] = ""
+        endif
+    endif
+    return g:scm_cache[l:key]
+endfun
 
 " set cmdheight=2
 " minimize size
@@ -562,8 +566,8 @@ map         <C-tab>         :BufstopBack<CR>
 map         <S-tab>         :BufstopForward<CR>
 
 " F keys
-nnoremap    <F1>            K
-inoremap    <F1>            <C-O>K
+" nnoremap    <F1>            K
+" inoremap    <F1>            <C-O>K
 
 nnoremap    <silent> <F2>   zm
 vnoremap    <silent> <F2>   <C-C>zm
@@ -633,10 +637,15 @@ let NERDTreeQuitOnOpen = 1
 let NERDTreeMouseMode  = 2
 
 " c/h alter
-let g:alternateExtensions_cc = "hh,h,HH,H"
-let g:alternateExtensions_CC = "hh,h,HH,H"
-let g:alternateExtensions_hh = "cc,c,CC,c"
-let g:alternateExtensions_HH = "cc,c,CC,c"
+let g:alternateExtensions_h = "c,C,cc,cpp,cxx,cu"
+let g:alternateExtensions_hh = "cc,cpp,cxx,cu"
+let g:alternateExtensions_hpp = "cc,cpp,cxx,cu"
+let g:alternateExtensions_cuh = "cu"
+let g:alternateExtensions_cc = "h,hh,hpp"
+let g:alternateExtensions_CC = "h,H,hh"
+let g:alternateExtensions_cpp = "h,hh,hpp"
+let g:alternateExtensions_cxx = "h,hh,hpp"
+let g:alternateExtensions_cu = "cuh,h,hh,hpp"
 
 let glib_deprecated_errors = 1
 
@@ -648,27 +657,7 @@ let g:ctrlp_arg_map = 1
 let g:ctrlp_follow_symlinks = 1
 let g:ctrlp_extensions = ['tag', 'undo', 'line', 'mixed']
 
-let g:BufstopAutoSpeedToggle = 1
-
-let g:Powerline_symbols = 'unicode'
-
-" remove <tab> from the trigger keys because it hinders ultisnips
-let g:ycm_key_list_select_completion = ['<Down>']
-let g:ycm_key_list_select_completion = ['<Up>']
-let g:ycm_add_preview_to_completeopt = 1
-let g:ycm_autoclose_preview_window_after_insertion = 1
-let g:ycm_autoclose_preview_window_after_completion = 1
-
-let g:snips_author = "Pierre-Antoine Lacaze"
-let g:snips_author_email = "pa.lacaze@laposte.net"
-
-let g:UltiSnipsUsePythonVersion = 2
-let g:UltiSnipsSnippetDirectories=["UltiSnips", "snippets"]
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-
-let g:notes_directory = "~/gentoo/notes"
+let g:notes_directories = ['~/gentoo/notes']
 let g:notes_suffix = '.notes'
 let g:notes_title_sync = 'no'
 "}}}
@@ -711,12 +700,13 @@ if has('autocmd')
     au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
 
     " cindent for c / c++ files
-    au BufNewFile,BufRead *.cpp,*.cc,*.h,*.c,*.hh
+    au BufNewFile,BufRead *.cpp,*.cc,*.h,*.c,*.hh,*cu
                 \ setlocal cindent |
                 \ runtime! syntax/clibs.vim |
                 \ setlocal fmr={,} |
                 \ setlocal list |
                 \ setlocal expandtab |
+                \ setlocal foldlevel=99 |
                 \ setlocal comments-=:// comments+=f://
 
     au BufNewFile,BufRead *.notes
@@ -729,6 +719,10 @@ if has('autocmd')
                 \ highlight notesRealURL ctermfg=blue cterm=underline |
                 \ highlight notesTextURL ctermfg=blue cterm=underline |
                 \ highlight notesUnixPath ctermfg=magenta cterm=underline
+
+    au BufNewFile,BufRead *.html,*.xhtml,*.css
+                \ setlocal shiftwidth=2 |
+                \ setlocal softtabsoft=2
 
     " we want notes saved automatically
     autocmd CursorHold *.notes call <SID>AutoSave()
