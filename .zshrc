@@ -21,7 +21,7 @@ DISABLE_LS_COLORS="false"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git extract fasd zsh-syntax-highlighting)
+plugins=(git extract zsh-syntax-highlighting)
 
 # Use EMACS-style keybindings despite my having EDITOR set to vim
 bindkey -e
@@ -90,36 +90,13 @@ if [ -x /usr/bin/dircolors ]; then
   fi
 fi
 
-# colors in linux TTY console
-if [ "$TERM" = "linux" ]; then
-    echo -en "\e]P0353535" #
-    echo -en "\e]P1D81860" #
-    echo -en "\e]P2B7CE42" #
-    echo -en "\e]P3FEA63C" #
-    echo -en "\e]P46F99B4" #
-    echo -en "\e]P58B7B8B" #
-    echo -en "\e]P6A7A15E" #
-    echo -en "\e]P7DDDDDD" #
-    echo -en "\e]P8666666" #
-    echo -en "\e]P9F00060" #
-    echo -en "\e]PABDE077" #
-    echo -en "\e]PBFFE863" #
-    echo -en "\e]PC7C96B0" #
-    echo -en "\e]PDD8BFD8" #
-    echo -en "\e]PEF0E68C" #
-    echo -en "\e]PFFFFFFF" #
-    clear # Clear artifacts
-fi
-
-
 ZSH_HIGHLIGHT_STYLES[globbing]='fg=yellow'
 ZSH_HIGHLIGHT_STYLES[path]='bold'
 
-
-export PATH="$HOME/travail/software/mxe/usr/bin:$PATH"
 export C_INCLUDE_PATH="$HOME/local/include"
 export CPLUS_INCLUDE_PATH="$HOME/local/include"
 export LIBRARY_PATH="$HOME/local/lib"
+export PATH="$HOME/travail/software/mxe/usr/bin:$PATH"
 export PATH="$HOME/local/bin:$PATH"
 export PKG_CONFIG_PATH="$HOME/local/lib/pkgconfig:$PKG_CONFIG_PATH"
 
@@ -136,22 +113,17 @@ alias m='ncmpcpp'
 alias vv='vim ~/.vim/vimrc'
 alias vz='vim ~/.zshrc'
 alias vx='vim ~/.xmonad/xmonad.hs'
-alias vs='vim ~/.xsession'
+alias vs='vim ~/.xinitrc'
 alias vX='vim ~/.Xresources'
 alias vt='vim ~/.tmux.conf'
+alias va='vim ~/.config/awesome/rc.lua'
 alias t='thunar&'
+alias wgets='H="--header"; wget $H="Accept-Language: en-us,en;q=0.5" $H="Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" $H="Connection: keep-alive" -U "Mozilla/5.0 (Windows NT 5.1; rv:10.0.2) Gecko/20100101 Firefox/10.0.2" --referer=http://www.askapache.com/ '
 
 
 if [ -s ~/gentoo/scripts ] ; then
     source ~/gentoo/scripts
 fi
-
-
-# fasd
-eval "$(fasd --init auto)"
-alias v='f -e vim' # quick opening files with vim
-alias m='f -e mplayer' # quick opening files with mplayer
-alias o='a -e xdg-open' # quick opening files with xdg-open
 
 
 # keys
