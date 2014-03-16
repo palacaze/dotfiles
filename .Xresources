@@ -10,31 +10,34 @@
 #define TERMINUS12 -*-terminus-medium-r-normal--12-*-*-*-c-*-UTFENC
 #define TERMINUS14 -*-terminus-medium-r-normal--14-*-*-*-c-*-UTFENC
 #define TERMINUS16 -*-terminus-medium-r-normal--16-*-*-*-c-*-UTFENC
-#define DEJAVU14   xft:DejaVu Sans Mono:antialias=true:autohint=true:pixelsize=13
-#define DEJAVU14B  xft:DejaVu Sans Mono:style=bold:antialias=true:autohint=true:pixelsize=13
-#define DEJAVU14I  xft:DejaVu Sans Mono:style=italic:antialias=true:autohint=true:pixelsize=13
+#define DEJAVU14   xft:DejaVu Sans Mono for Powerline:style=book:antialias=true:autohint=false:pixelsize=13
+#define DEJAVU14B  xft:DejaVu Sans Mono for Powerline:style=bold:antialias=true:autohint=false:pixelsize=13
+#define DEJAVU14I  xft:DejaVu Sans Mono for Powerline:style=oblique:antialias=true:autohint=false:pixelsize=13
+#define DEJAVU14BI xft:DejaVu Sans Mono for Powerline:style=bold oblique:antialias=true:autohint=false:pixelsize=13
+#define INCON14    xft:Inconsolata:style=medium:antialias=true:autohint=true:pixels=15
 ! }}}
 
 ! ## XFT {{{
 Xft.dpi:       98
 Xft.lcdfilter: lcddefault
 Xft.autohint:  false
-Xft.hintstyle: hintfull
+Xft.hintstyle: hintslight
 Xft.hinting:   true
 Xft.antialias: true
 Xft.rgba:      rgb
 ! }}}
 
 ! ## XTERM {{{
-XTerm*faceName: DejaVu Sans Mono:pixelsize=14
+XTerm*faceName:           DEJAVU14
 XTerm.allow_bold:         true
 XTerm.meta8:              false
 ! }}}
 
 ! ## URXVT {{{
 URxvt.font:               DEJAVU14
-URxvt.boldfont:           DEJAVU14B
-URxvt.italicfont:         DEJAVU14I
+URxvt.boldFont:           DEJAVU14B
+URxvt.italicFont:         DEJAVU14I
+URxvt.boldItalicFont:     DEJAVU14BI
 
 URxvt.allow_bold:         true
 URxvt.meta8:              false
@@ -65,7 +68,7 @@ URxvt.searchable-scrollback: C-M-s
 ! change font with Ctrl-Fn keys, font size with Ctrl +/-
 URxvt.keysym.C-F1: command:\033]710;DEJAVU14\007
 URxvt.keysym.C-F2: command:\033]710;TERMINUS14\007
-URxvt.keysym.C-F3: command:\033]710;ANONPRO14\007
+URxvt.keysym.C-F3: command:\033]710;INCON14\007
 
 URxvt.keysym.C-KP_Add: perl:font-size:increase
 URxvt.keysym.C-KP_Subtract: perl:font-size:decrease
