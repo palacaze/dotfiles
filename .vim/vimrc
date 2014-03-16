@@ -722,7 +722,7 @@ if has('autocmd')
 
     au BufNewFile,BufRead *.html,*.xhtml,*.css
                 \ setlocal shiftwidth=2 |
-                \ setlocal softtabsoft=2
+                \ setlocal softtabstop=2
 
     " we want notes saved automatically
     autocmd CursorHold *.notes call <SID>AutoSave()
