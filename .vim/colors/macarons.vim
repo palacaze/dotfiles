@@ -38,7 +38,7 @@ hi diffFile        ctermfg=135                                     guifg=#af5fff
 hi diffSubname     ctermfg=218                                     guifg=#ffafd7
 
 hi Directory       ctermfg=118                    cterm=bold       guifg=#87ff00                 gui=bold
-hi Error           ctermfg=196      ctermbg=none                   guifg=#ff0000  guibg=bg  
+hi Error           ctermfg=196      ctermbg=none                   guifg=#ff0000  guibg=bg
 hi ErrorMsg        ctermfg=199      ctermbg=none  cterm=bold       guifg=#ff00af  guibg=bg       gui=bold
 hi WarningMsg      ctermfg=202      ctermbg=none  cterm=bold       guifg=#ff5f00  guibg=bg       gui=bold
 hi Exception       ctermfg=118                    cterm=bold       guifg=#87ff00                 gui=bold
@@ -73,10 +73,10 @@ hi Repeat          ctermfg=161                    cterm=bold       guifg=#d7005f
 hi Search          ctermfg=16       ctermbg=40    cterm=none       guifg=#000000  guibg=#00d700  gui=none
 
 " marks column
-hi SignColumn      ctermfg=118      ctermbg=none                   guifg=#87ff00  guibg=bg  
+hi SignColumn      ctermfg=118      ctermbg=none                   guifg=#87ff00  guibg=bg
 hi SpecialChar     ctermfg=161                    cterm=bold       guifg=#d7005f                 gui=bold
 hi SpecialComment  ctermfg=245                    cterm=bold       guifg=#8a8a8a                 gui=bold
-hi Special         ctermfg=81       ctermbg=none                   guifg=#5fd7ff  guibg=bg  
+hi Special         ctermfg=81       ctermbg=none                   guifg=#5fd7ff  guibg=bg
 hi SpecialKey      ctermfg=245                                     guifg=#8a8a8a
 
 hi SpellBad        ctermfg=196      ctermbg=bg    cterm=bold       guifg=#ff0000  guibg=bg       gui=bold
@@ -85,7 +85,7 @@ hi SpellRare       ctermfg=96       ctermbg=bg    cterm=bold       guifg=#875f87
 hi SpellLocal      ctermfg=124      ctermbg=bg    cterm=bold       guifg=#af0000  guibg=bg       gui=bold
 
 hi Statement       ctermfg=172                    cterm=bold       guifg=#d78700                 gui=bold
-hi StatusLine      ctermfg=252      ctermbg=25    cterm=bold       guifg=#d0d0d0  guibg=#005faf  gui=bold
+hi StatusLine      ctermfg=208      ctermbg=237   cterm=bold       guifg=#ff8700  guibg=#3a3a3a  gui=bold
 hi StatusLineNC    ctermfg=237      ctermbg=252                    guifg=#3a3a3a  guibg=#d0d0d0
 hi StorageClass    ctermfg=208                                     guifg=#ff8700
 hi Structure       ctermfg=81                                      guifg=#5fd7ff
@@ -107,7 +107,7 @@ hi Comment         ctermfg=137                                     guifg=#af875f
 hi ColorColumn                      ctermbg=235                                   guibg=#262626
 hi CursorLine                       ctermbg=241   cterm=none                      guibg=#626262  gui=none
 hi CursorColumn                     ctermbg=241                                   guibg=#626262
-hi LineNr          ctermfg=241      ctermbg=none                   guifg=#626262  guibg=bg  
+hi LineNr          ctermfg=241      ctermbg=none                   guifg=#626262  guibg=bg
 hi NonText         ctermfg=237      ctermbg=none  cterm=none       guifg=#3a3a3a  guibg=bg       gui=none
 
 hi TabLine         ctermfg=fg       ctermbg=237   cterm=none       guifg=fg       guibg=#3a3a3a  gui=none

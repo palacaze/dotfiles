@@ -61,6 +61,15 @@ NeoBundle 'Shougo/vimproc', {
     \    },
     \ }
 
+" Completion plugin for the D programming language using DCD
+NeoBundle "Hackerpilot/DCD", {'rtp': 'editors/vim'}
+
+"Vastly improved Javascript indentation and syntax support in Vim
+NeoBundle "pangloss/vim-javascript"
+
+" A code-completion engine for Vim
+NeoBundle "Valloric/YouCompleteMe", { 'build' : { 'unix' : './install.sh' } }
+
 " Automatically close quotes, parenthesis, braces, and other delimiters.
 NeoBundle 'Raimondi/delimitMate'
 
@@ -100,6 +109,9 @@ NeoBundle 'kien/rainbow_parentheses.vim'
 " Use the power of vim to rename groups of files
 NeoBundle 'renamer.vim'
 
+" OpenGL Vim syntax highlighting
+NeoBundle "beyondmarc/opengl.vim"
+
 " syntax for qmake tool from QT
 NeoBundle 'qmake--syntax.vim'
 
@@ -121,12 +133,24 @@ NeoBundle 'terryma/vim-multiple-cursors'
 " Quicktask is a lightweight Vim task management plugin
 NeoBundle 'xolox/vim-notes', { 'depends' : ['xolox/vim-misc'] }
 
+" lean & mean status/tabline for vim that's light as air
+NeoBundle 'bling/vim-airline'
+
+" Super simple vim plugin to show the list of buffers in the command bar
+NeoBundle 'bling/vim-bufferline'
+
+" fugitive.vim: a Git wrapper so awesome, it should be illegal
+NeoBundle "tpope/vim-fugitive"
+
+" A Vim plugin which shows a git diff in the gutter
+NeoBundle 'airblade/vim-gitgutter'
+
 " colorscheme making stuff
 " A Vim plugin to colorize all text in the form #rrggbb or #rgb
-" NeoBundle 'lilydjwg/colorizer'
+NeoBundle 'lilydjwg/colorizer'
 
 " All 256 xterm colors with their RGB equivalents, right in Vim!
-" NeoBundle 'guns/xterm-color-table.vim'
+NeoBundle 'guns/xterm-color-table.vim'
 
 NeoBundleCheck
 " }}}
@@ -156,7 +180,7 @@ if has('gui_running') || &t_Co > 2
     set background=dark
     set popt+=syntax:y " syntax when printing
 
-    if $COLORTERM == "gnome-terminal" 
+    if $COLORTERM == "gnome-terminal"
         set t_Co=256
         colorscheme macarons
     elseif  $TERM == "screen"       || $TERM == "screen-256color"
@@ -203,20 +227,21 @@ set number
 set hidden
 set showmatch
 set showcmd
-set noshowmode
+set showmode
 set laststatus=2 " always show the status line
 
-set statusline=
-set statusline+=%-3.3n\                                 " buffer number
-set statusline+=%f\                                     " file name
-set statusline+=%{ScmInfo()}                            " git info
-set statusline+=%h%#warningmsg#%m%r%w%*                 " flags
-set statusline+=\[%{strlen(&ft)?&ft:'none'},            " filetype
-set statusline+=%{&encoding},                           " encoding
-set statusline+=%{&fileformat}]                         " file format
-set statusline+=%=                                      " right align
-set statusline+=0x%-8B\                                 " current char
-set statusline+=%-14.(%l,%c%V%)\ %<%P                   " offset
+" set statusline=
+" set statusline+=%-3.3n                         " buffer number
+" set statusline+=\ %<                           " truncate from here on
+" set statusline+=%f                             " file name
+" set statusline+=%{ScmInfo()}                   " git info
+" set statusline+=%(\ %h%#warningmsg#%m%r%w%*%)  " flags
+" set statusline+=\ [%{strlen(&ft)?&ft:'none'},  " filetype
+" set statusline+=%{&encoding},                  " encoding
+" set statusline+=%{&fileformat}]                " file format
+" set statusline+=%=                             " right align
+" set statusline+=0x%-8B                         " current char
+" set statusline+=%((%l,%c%V)%)\ %P              " offset
 
 " git info
 let g:scm_cache = {}
@@ -268,7 +293,7 @@ if has("autocmd")
 endif
 
 " avoid Esc key pauses triggered by remapped meta keycodes
-set ttimeout timeoutlen=1000 ttimeoutlen=10
+set timeout timeoutlen=1000 ttimeoutlen=10
 
 " set updatetime=500       " tag preview
 set conceallevel=2
@@ -296,7 +321,7 @@ if exists("+showtabline")
         for i in range(tabpagenr('$'))
 
             " begin tab
-	    let s .= '%' . (i + 1) . 'T'
+            let s .= '%' . (i + 1) . 'T'
             "number
             let s .= '%1*' . (i + 1) . '%*:'
 
@@ -310,7 +335,7 @@ if exists("+showtabline")
             " name of currently selected window inside tab
             let buf_list = tabpagebuflist(i + 1)
             let winnr = tabpagewinnr(i + 1)
-	    let buf_name = bufname(buf_list[winnr - 1])
+            let buf_name = bufname(buf_list[winnr - 1])
             let buf_type = getbufvar( buf_name, "&buftype")
             if buf_type == 'help'
                 let s .= '[H]' . fnamemodify(buf_name, ':t:s/.txt$//')
@@ -379,7 +404,7 @@ au VimEnter * :call <SID>check_pager_mode()
 
 set formatoptions=tcrqn
 
-let mapleader = ','
+" let mapleader = ','
 
 set nowrap
 set whichwrap=<,>,[,],
@@ -466,19 +491,26 @@ endfunction
 
 " make meta keys 'work' on terminal vim. For this to work the terminal
 " must send escape sequences instead of Alt keycodes
-if !has('gui_running')
-    call <SID>MapKeyCode('M-x', 'x')
-    call <SID>MapKeyCode('M-c', 'c')
-    call <SID>MapKeyCode('M-s', 's')
-    call <SID>MapKeyCode('M-q', 'q')
-    call <SID>MapKeyCode('M-a', 'a')
-endif
+call <SID>MapKeyCode('M-x', 'x')
+call <SID>MapKeyCode('M-c', 'c')
+call <SID>MapKeyCode('M-s', 's')
+call <SID>MapKeyCode('M-q', 'q')
+call <SID>MapKeyCode('M-a', 'a')
+call <SID>MapKeyCode('M-y', 'y')
+call <SID>MapKeyCode('M-d', 'd')
+call <SID>MapKeyCode('M-p', 'p')
+call <SID>MapKeyCode('M-P', 'P')
+call <SID>MapKeyCode('M-v', 'v')
+call <SID>MapKeyCode('M-V', 'V')
 
 " change annoying behaviours
 vnoremap    <BS>            d
 inoremap    #               X<BS>#
 nmap        q:              :q
 nnoremap    Y               y$
+
+" , is easier than : on a bépo keyboard
+nmap        ,               :
 
 " easy indenting
 vnoremap    <               <gv
@@ -500,9 +532,6 @@ nmap        z6              :setlocal foldlevel=6<CR>
 nmap        z0              :setlocal foldlevel=9999<CR>
 
 " Use ALT-S for saving, also in Insert mode
-nmap        <C-s>           :update<CR>
-vmap        <C-s>           <C-C>:update<CR>
-imap        <C-s>           <C-O>:update<CR>
 nmap        <M-s>           :update<CR>
 vmap        <M-s>           <C-C>:update<CR>
 imap        <M-s>           <C-O>:update<CR>
@@ -511,6 +540,16 @@ imap        <M-s>           <C-O>:update<CR>
 nmap        <M-q>           :q<CR>
 vmap        <M-q>           <C-C>:q<CR>
 imap        <M-q>           <C-O>:q<CR>
+
+" yank, paste, delete lines in insert mode
+imap        <M-y>           <C-O>yy
+imap        <M-d>           <C-O>dd
+imap        <M-p>           <C-O>p
+imap        <M-p>           <C-O>P
+
+" insert to visual mode
+imap        <M-v>           <C-O>v
+imap        <M-V>           <C-O>V
 
 " comment out lines of code (toggles)
 inoremap    <C-Space>       <C-_>
@@ -542,6 +581,12 @@ inoremap    <C-PageDown>    <C-O>:tabn<CR>
 nmap        <C-t>           :tabnew<CR>
 imap        <C-t>           <C-O>:tabnew<CR>
 
+" buffer control
+nnoremap    <C-Up>          :bprevious<CR>
+nnoremap    <C-Down>        :bnext<CR>
+inoremap    <C-Up>          <C-O>:bprevious<CR>
+inoremap    <C-Down>        <C-O>:bnext<CR>
+
 " window control: moving between windows and resizing
 nmap        <C-k>           <C-w>c
 map         <S-Up>          <C-w><Up>
@@ -561,14 +606,11 @@ imap        <C-S-Right>     <C-O><C-W>2>
 map         <C-S-Left>      <C-w>2<
 imap        <C-S-Left>      <C-O><C-W>2<
 
-nmap        ,e              :exe 'tabe ' . expand(g:my_vimfiles_dir) . '/vimrc'<CR>
-
-map         <C-tab>         :BufstopBack<CR>
-map         <S-tab>         :BufstopForward<CR>
+nmap        ;e              :exe 'tabe ' . expand(g:my_vimfiles_dir) . '/vimrc'<CR>
 
 " F keys
-" nnoremap    <F1>            K
-" inoremap    <F1>            <C-O>K
+nnoremap    <F1>            K
+inoremap    <F1>            <C-O>K
 
 nnoremap    <silent> <F2>   zm
 vnoremap    <silent> <F2>   <C-C>zm
@@ -609,6 +651,9 @@ inoremap    <silent> <F12>  <C-O>:call <SID>UpdateTags()<CR>
 " Settings for Explorer.vim
 let g:explHideFiles='^\.'
 
+let g:gitgutter_realtime = 0
+let g:gitgutter_eager = 0
+
 " Settings for Netrw
 let g:netrw_list_hide='^\.,\~$'
 
@@ -626,6 +671,9 @@ let use_xhtml         = 1
 " clibs syntax hightlighting options
 let c_hi_identifiers = 'all'
 let c_hi_libs        = ['*']
+
+" airline
+let g:airline_powerline_fonts = 1
 
 let NERDTreeWinPos     = 'left'
 let NERDTreeQuitOnOpen = 1
@@ -655,9 +703,21 @@ let g:ctrlp_extensions = ['tag', 'undo', 'line', 'mixed']
 let g:notes_directories = ['~/gentoo/notes']
 let g:notes_suffix = '.notes'
 let g:notes_title_sync = 'no'
+
+let delimitMate_expand_cr = 1
+
+" very slow
+let g:colorizer_startup = 0
+
+" d language
+let s:tlist_def_d_settings = 'd;M:module;T:template;v:interface;c:class;m:variable;' .
+    \ 't:typedef;g:enum;e:enum-member;es:struct;u:union;f:function'
+
 " custom comment string for tcomment plugin
 autocmd FileType tmux set commentstring=#\ %s
 
+" markdown
+let g:vim_markdown_initial_foldlevel=3
 "}}}
 
 "{{{            Functions
@@ -741,6 +801,8 @@ if has('autocmd')
 
     " But do when hitting enter on a comment line, or when wrapping
     au FileType * setl formatoptions+=tcrq
+
+    au BufEnter * let &titlestring = hostname() . "[vim(" . expand("%:t") . ")]"
 
     " au syntax * call rainbow_parentheses#activate()
 
