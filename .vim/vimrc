@@ -88,8 +88,8 @@ NeoBundle 'godlygeek/tabular'
 " A fuzzy file-finder, mru switcher, buffer finder, and more
 NeoBundle 'kien/ctrlp.vim'
 
-" commentary.vim: comment stuff out
-NeoBundle 'tpope/vim-commentary'
+" comment stuff out
+NeoBundle 'tomtom/tcomment_vim'
 
 " A source code browser plugin for Vim
 NeoBundle 'majutsushi/tagbar'
@@ -513,11 +513,12 @@ vmap        <M-q>           <C-C>:q<CR>
 imap        <M-q>           <C-O>:q<CR>
 
 " comment out lines of code (toggles)
+inoremap    <C-Space>       <C-_>
 nmap        <silent> <M-x>  gcc
 vmap        <silent> <M-x>  gc
-imap        <silent> <M-x>  <C-O>gcc
+imap        <silent> <M-x>  <C-O>:TComment<CR>
 nmap        <silent> <M-c>  gccj
-imap        <silent> <M-c>  <C-O>gcc<C-O>j
+imap        <silent> <M-c>  <C-O>:TComment<CR><C-O>j
 
 " Align stuff with Tabularize
 nmap        <M-a>&          :Tabularize /&<CR>
@@ -605,12 +606,6 @@ inoremap    <silent> <F12>  <C-O>:call <SID>UpdateTags()<CR>
 
 "{{{            Plugins settings
 "-----------------------------------------------
-
-" Settings for commentary
-autocmd FileType cmake set commentstring=#\ %s
-autocmd FileType xdefaults set commentstring=!\ %s
-autocmd FileType tmux set commentstring=#\ %s
-
 " Settings for Explorer.vim
 let g:explHideFiles='^\.'
 
@@ -660,6 +655,9 @@ let g:ctrlp_extensions = ['tag', 'undo', 'line', 'mixed']
 let g:notes_directories = ['~/gentoo/notes']
 let g:notes_suffix = '.notes'
 let g:notes_title_sync = 'no'
+" custom comment string for tcomment plugin
+autocmd FileType tmux set commentstring=#\ %s
+
 "}}}
 
 "{{{            Functions
