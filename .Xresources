@@ -93,6 +93,11 @@ URxvt.keysym.M-Home:    \033[1;3H
 URxvt.keysym.M-Prior:   \033[5;3~
 URxvt.keysym.M-Next:    \033[6;3~
 
+URxvt.keysym-M-S-Up:    \033[1;4A
+URxvt.keysym-M-S-Down:  \033[1;4B
+URxvt.keysym-M-S-Right: \033[1;4C
+URxvt.keysym-M-S-Left:  \033[1;4D
+
 URxvt.keysym.C-Up:      \033[1;5A
 URxvt.keysym.C-Down:    \033[1;5B
 URxvt.keysym.C-Right:   \033[1;5C
