@@ -20,17 +20,14 @@ let s:my_backupdir    = expand(s:my_cache_dir) . "/backup//"
 let s:my_directory    = expand(s:my_cache_dir) . "/swap//"
 let s:my_undodir      = expand(s:my_cache_dir) . "/undo//"
 
-if !isdirectory(s:my_cache_dir)
-    call mkdir(s:my_cache_dir)
-endif
 if !isdirectory(s:my_backupdir)
-    call mkdir(s:my_backupdir)
+    call mkdir(s:my_backupdir, "p")
 endif
 if !isdirectory(s:my_directory)
-    call mkdir(s:my_directory)
+    call mkdir(s:my_directory, "p")
 endif
 if !isdirectory(s:my_undodir)
-    call mkdir(s:my_undodir)
+    call mkdir(s:my_undodir, "p")
 endif
 
 let &backupdir = expand(s:my_backupdir)
@@ -68,7 +65,7 @@ NeoBundle "Hackerpilot/DCD", {'rtp': 'editors/vim'}
 NeoBundle "pangloss/vim-javascript"
 
 " A code-completion engine for Vim
-NeoBundle "Valloric/YouCompleteMe", { 'build' : { 'unix' : './install.sh' } }
+" NeoBundle "Valloric/YouCompleteMe", { 'build' : { 'unix' : './install.sh' } }
 
 " Automatically close quotes, parenthesis, braces, and other delimiters.
 NeoBundle 'Raimondi/delimitMate'
@@ -137,7 +134,7 @@ NeoBundle 'xolox/vim-notes', { 'depends' : ['xolox/vim-misc'] }
 NeoBundle 'bling/vim-airline'
 
 " Super simple vim plugin to show the list of buffers in the command bar
-NeoBundle 'bling/vim-bufferline'
+" NeoBundle 'bling/vim-bufferline'
 
 " fugitive.vim: a Git wrapper so awesome, it should be illegal
 NeoBundle "tpope/vim-fugitive"
@@ -151,6 +148,9 @@ NeoBundle 'lilydjwg/colorizer'
 
 " All 256 xterm colors with their RGB equivalents, right in Vim!
 NeoBundle 'guns/xterm-color-table.vim'
+
+" Ascii art drawing plugin"
+NeoBundle 'vim-scripts/DrawIt'
 
 NeoBundleCheck
 " }}}
@@ -295,9 +295,9 @@ endif
 " avoid Esc key pauses triggered by remapped meta keycodes
 set timeout timeoutlen=1000 ttimeoutlen=10
 
-" set updatetime=500       " tag preview
 set conceallevel=2
-set guioptions=imrRbate  " remove useless UI
+set guioptions-=m        " remove useless UI
+set guioptions-=T        " remove useless UI
 set shortmess=atI        " remove useless messages
 set lazyredraw           " speedup processing
 set ttyfast
@@ -491,17 +491,19 @@ endfunction
 
 " make meta keys 'work' on terminal vim. For this to work the terminal
 " must send escape sequences instead of Alt keycodes
-call <SID>MapKeyCode('M-x', 'x')
-call <SID>MapKeyCode('M-c', 'c')
-call <SID>MapKeyCode('M-s', 's')
-call <SID>MapKeyCode('M-q', 'q')
-call <SID>MapKeyCode('M-a', 'a')
-call <SID>MapKeyCode('M-y', 'y')
-call <SID>MapKeyCode('M-d', 'd')
-call <SID>MapKeyCode('M-p', 'p')
-call <SID>MapKeyCode('M-P', 'P')
-call <SID>MapKeyCode('M-v', 'v')
-call <SID>MapKeyCode('M-V', 'V')
+if ! has('gui_running')
+    call <SID>MapKeyCode('M-x', 'x')
+    call <SID>MapKeyCode('M-c', 'c')
+    call <SID>MapKeyCode('M-s', 's')
+    call <SID>MapKeyCode('M-q', 'q')
+    call <SID>MapKeyCode('M-a', 'a')
+    call <SID>MapKeyCode('M-y', 'y')
+    call <SID>MapKeyCode('M-d', 'd')
+    call <SID>MapKeyCode('M-p', 'p')
+    call <SID>MapKeyCode('M-P', 'P')
+    call <SID>MapKeyCode('M-v', 'v')
+    call <SID>MapKeyCode('M-V', 'V')
+endif
 
 " change annoying behaviours
 vnoremap    <BS>            d
@@ -678,6 +680,10 @@ let g:airline_powerline_fonts = 1
 let NERDTreeWinPos     = 'left'
 let NERDTreeQuitOnOpen = 1
 let NERDTreeMouseMode  = 2
+let NERDTreeIgnore     = ['\.o$', '\~$']
+function! NERDTreeCustomIgnoreFilter(path)
+    return a:path.isExecutable
+endfunction
 
 " c/h alter
 let g:alternateExtensions_h = "c,C,cc,cpp,cxx,cu"
@@ -786,8 +792,8 @@ if has('autocmd')
     autocmd CursorHold *.notes call <SID>AutoSave()
     autocmd CursorHoldI *.notes call <SID>AutoSave()
 
-    au FileType text
-                \ setlocal textwidth=78 |
+    au FileType text,mkd
+                \ setlocal textwidth=0 |
                 \ setlocal wrap
 
     " jump to last edited line on opening
