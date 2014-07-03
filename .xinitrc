@@ -41,35 +41,34 @@ hsetroot -fill /data/photos/Chats/flamme+fusae/IMG_7180.JPG
 thunderbird &
 
 # irssi
-urxvt -name irssi -e tmux-irssi &
+urxvt -name irssi -e cubox-irc &
 
-wmname LG3D
+wmname LG3D  &
 
 # redshift
-gtk-redshift -l 48.52:2.13 -t 6500:4500 -m vidmode &
+gtk-redshift -l 48.52:2.13 -t 6500:4500 -m randr &
 
 # sound volume tray icon
-pulseaudio
+pulseaudio &
 volumeicon &
 mpd &
-
-# ssh-agent
 
 # term daemon
 # urxvtd -q -f -o
 
+# compositor
+compton --paint-on-overlay &
+
 # screensaver
 xscreensaver -no-splash &
 
+# keychain
+eval `keychain --noask --nogui`
+
 # file browser
-thunar --daemon &
+# thunar --daemon &
 
 # start wm
 ck-launch-session dbus-launch --sh-syntax --exit-with-session awesome
-
-# & wmpid=$!
-
-# cleanup
-# wait $wmpid
 
 pkill redshift
